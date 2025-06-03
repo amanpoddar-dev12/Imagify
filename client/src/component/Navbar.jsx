@@ -28,8 +28,18 @@ const Navbar = () => {
               alt=""
             />
             <div className="absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-12">
-              <ul className="list-none m-0 p-2 bg-white rounded-md border text-sm">
-                <li onClick={logout} className="py-1 px-2 cursor-pointer pr-10">
+              <ul className="list-none m-0 p-2 bg-white  rounded-md border text-sm">
+                <li
+                  className="hover:bg-slate-200 p-2 cursor-pointer px-2 py-1"
+                  onClick={() => navigate("/studio")}
+                >
+                  Studio
+                </li>
+
+                <li
+                  onClick={logout}
+                  className="py-1 px-2 cursor-pointer pr-10 hover:bg-slate-200 p-2"
+                >
                   Logout
                 </li>
               </ul>

@@ -84,12 +84,13 @@ export const generateImage = async (req, res) => {
 // import FormData from "form-data";
 // import userModel from "../models/userModel.js"; // adjust path
 
-export const enhanceImage = async (req, res) => {
+export const reImagine = async (req, res) => {
   try {
     const { prompt } = req.body;
     const photo = req.file;
     const userId = req.userId;
-
+    console.log(photo);
+    console.log(userId);
     if (!prompt || !photo || !userId) {
       return res
         .status(400)
