@@ -35,7 +35,6 @@ const Navbar = () => {
                 >
                   Studio
                 </li>
-
                 <li
                   onClick={logout}
                   className="py-1 px-2 cursor-pointer pr-10 hover:bg-slate-200 p-2"

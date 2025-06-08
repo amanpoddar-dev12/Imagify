@@ -6,7 +6,7 @@ import userRouter from "./routes/userRoutes.js";
 // import inhan
 const PORT = process.env.PORT || 4000;
 import dotenv from "dotenv";
-import inhanceImageroutes from "./routes/inhanceImageRoutes.js";
+
 import imageRouter from "./routes/imageRoutes.js";
 dotenv.config();
 
@@ -16,7 +16,6 @@ app.use(cors());
 await connectDB();
 // import imageRoutes from './routes/imageRoutes.js';
 
-app.use("/api/imageinhance", inhanceImageroutes);
 app.use("/api/user", userRouter);
 app.use("/api/image", imageRouter);
 app.get("/", (req, res) => res.send("API working"));

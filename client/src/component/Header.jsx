@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { assets } from "../assets/assets";
 import { discription } from "../assets/assets";
 import { motion } from "motion/react";
@@ -7,7 +7,14 @@ import { useNavigate } from "react-router-dom";
 function Header() {
   const { user, setShowLogin } = useContext(AppContext);
   const navigate = useNavigate();
-  function onClickhandler() {
+  function onClickStudio() {
+    if (user) {
+      navigate("/studio");
+    } else {
+      setShowLogin(true);
+    }
+  }
+  function onClickGenerateImage() {
     if (user) {
       navigate("/result");
     } else {
@@ -26,7 +33,6 @@ function Header() {
         initial={{ opacity: 0, y: -20 }}
         transition={{ delay: 0.2, duration: 0.8 }}
         animate={{ opacity: 1, y: 0 }}
-        // whileInView={{ opacity: 1, y: 0 }}
       >
         <p>Best text to image generator</p>
         <img src={assets.star_icon} alt="" />
@@ -47,21 +53,38 @@ function Header() {
       >
         {discription.text}
       </motion.p>
-      <motion.button
-        className="sm:text-lg text-white bg-black w-auto mt-8 px-12 py-2.5 flex items-center gap-2 rounded-full"
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{
-          default: { duration: 0.5 },
-          opacity: { delay: 0.8, duration: 1 },
-        }}
-        onClick={onClickhandler}
-      >
-        Generate Images
-        <img className="h-6" src={assets.star_group} alt="" />
-      </motion.button>
+      <div className="lg:flex lg:gap-6 ">
+        <motion.button
+          className="sm:text-lg   text-black border border-black w-auto mt-8 px-12 py-2.5 flex items-center gap-2  rounded-full"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            default: { duration: 0.5 },
+            opacity: { delay: 0.8, duration: 1 },
+          }}
+          onClick={onClickGenerateImage}
+        >
+          Generate
+          {/* <img className="h-6" src={assets.star_group} alt="" /> */}
+        </motion.button>
+        <motion.button
+          className="sm:text-lg text-white bg-black w-auto mt-8 px-12 py-2.5 flex items-center gap-2 rounded-full"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            default: { duration: 0.5 },
+            opacity: { delay: 0.8, duration: 1 },
+          }}
+          onClick={onClickStudio}
+        >
+          Studio
+          <img className="h-6" src={assets.star_group} alt="" />
+        </motion.button>
+      </div>
       <motion.div
         className="flex flex-wrap justify-center mt-16 gap-3"
         initial={{ opacity: 0 }}

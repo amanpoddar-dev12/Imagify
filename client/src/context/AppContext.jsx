@@ -33,6 +33,7 @@ const AppContextProvider = (props) => {
         { prompt },
         { headers: { token } }
       );
+      // console.log(data);
       if (data.success) {
         loadCreditsData();
         return data.resultImage;
@@ -46,6 +47,107 @@ const AppContextProvider = (props) => {
     } catch (error) {
       toast.error(error.message);
     }
+  };
+
+  // const reImagine = async (imageFile) => {
+  //   try {
+  //     if (!imageFile) {
+  //       toast.error("Please provide image.");
+  //       return;
+  //     }
+
+  //     const formData = new FormData();
+  //     formData.append("image_file", imageFile);
+  //     // formData.append("prompt", prompt); // ✅ Add this back
+
+  //     const response = await axios.post(
+  //       `${backendUrl}/api/image/reImagine`,
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //           token,
+  //         },
+  //       }
+  //     );
+  //     const imageURL = response.data.resultImage;
+  //     loadCreditsData();
+  //     return imageURL;
+  //   } catch (error) {
+  //     console.error("Backend Error:", error.response?.data || error.message);
+  //     toast.error(
+  //       error?.response?.data?.message ||
+  //         "Something went wrong while generating image."
+  //     );
+  //   }
+  // };
+  // const reMoveBackGround = async (imageFile) => {
+  //   try {
+  //     if (!imageFile) {
+  //       toast.error("Please provide image.");
+  //       return;
+  //     }
+
+  //     const formData = new FormData();
+  //     formData.append("image_file", imageFile);
+  //     // formData.append("prompt", prompt); // ✅ Add this back
+
+  //     const response = await axios.post(
+  //       `${backendUrl}/api/image/removebackground`,
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //           token,
+  //         },
+  //       }
+  //     );
+  //     const imageURL = response.data.resultImage;
+  //     loadCreditsData();
+  //     return imageURL;
+  //   } catch (error) {
+  //     console.error("Backend Error:", error.response?.data || error.message);
+  //     toast.error(
+  //       error?.response?.data?.message ||
+  //         "Something went wrong while generating image."
+  //     );
+  //   }
+  // };
+
+  const handleImageProcessing = async (imageFile, apiPath) => {
+    try {
+      if (!imageFile) {
+        toast.error("Please provide image.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("image_file", imageFile);
+
+      const response = await axios.post(`${backendUrl}${apiPath}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          token,
+        },
+      });
+
+      const imageURL = response.data.resultImage;
+      loadCreditsData();
+      return imageURL;
+    } catch (error) {
+      console.error("Backend Error:", error.response?.data || error.message);
+      toast.error(
+        error?.response?.data?.message ||
+          "Something went wrong while generating image."
+      );
+    }
+  };
+  const reImagine = (imageFile) => {
+    return handleImageProcessing(imageFile, "/api/image/reImagine");
+  };
+
+  const reMoveBackGround = (imageFile) => {
+    return handleImageProcessing(imageFile, "/api/image/removebackground");
   };
 
   const logout = () => {
@@ -71,6 +173,8 @@ const AppContextProvider = (props) => {
     loadCreditsData,
     logout,
     generateImage,
+    reImagine,
+    reMoveBackGround,
   };
 
   return (
