@@ -2,8 +2,8 @@ import React, { useState, useContext } from "react";
 import toast from "react-hot-toast";
 import { AppContext } from "../../context/AppContext";
 
-function RemoveText() {
-  const { removetext } = useContext(AppContext);
+function ImageUpscaling() {
+  const { reMoveBackGround } = useContext(AppContext);
   const [selectedImage, setSelectedImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
   const [reimaginedImageUrl, setReimaginedImageUrl] = useState("");
@@ -38,7 +38,7 @@ function RemoveText() {
 
     setLoading(true);
     try {
-      const result = await removetext(selectedImage);
+      const result = await reMoveBackGround(selectedImage);
       // console.log(result);
       if (result) {
         setReimaginedImageUrl(result);
@@ -54,7 +54,9 @@ function RemoveText() {
 
   return (
     <div className="p-6 max-w-xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-4 text-center">Remove Text</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-center">
+        ImageUpscaling
+      </h2>
 
       {/* Image Upload */}
 
@@ -79,7 +81,7 @@ function RemoveText() {
           <div className="aspect-video mb-2">
             <video
               className="w-full h-full rounded"
-              src="https://static.clipdrop.co/web/apis/remove-text/remove-text-demo.mp4"
+              src="https://static.clipdrop.co/web/apis/homepage/remove-background-demo.mp4"
               autoPlay
               loop
               muted
@@ -121,4 +123,4 @@ function RemoveText() {
   );
 }
 
-export default RemoveText;
+export default ImageUpscaling;

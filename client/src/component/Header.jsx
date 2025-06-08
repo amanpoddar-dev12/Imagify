@@ -53,7 +53,7 @@ function Header() {
       >
         {discription.text}
       </motion.p>
-      <div className="lg:flex lg:gap-6 ">
+      <div className="lg:flex lg:gap-6  ">
         <motion.button
           className="sm:text-lg   text-black border border-black w-auto mt-8 px-12 py-2.5 flex items-center gap-2  rounded-full"
           whileHover={{ scale: 1.05 }}

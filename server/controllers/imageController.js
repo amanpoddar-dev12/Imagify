@@ -347,3 +347,20 @@ export const removeBackGround = async (req, res) => {
     apiKey: process.env.CLIPDROP_API,
   });
 };
+
+export const productphotography = async (req, res) => {
+  await processImageWithExternalAPI({
+    req,
+    res,
+    apiUrl: "https://clipdrop-api.co/product-photography/v1", // adjust endpoint
+    apiKey: process.env.CLIPDROP_API,
+  });
+};
+export const removetext = async (req, res) => {
+  await processImageWithExternalAPI({
+    req,
+    res,
+    apiUrl: "https://clipdrop-api.co/remove-text/v1", // adjust endpoint
+    apiKey: process.env.CLIPDROP_API,
+  });
+};

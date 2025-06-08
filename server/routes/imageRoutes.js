@@ -2,8 +2,10 @@ import express from "express";
 import multer from "multer";
 import {
   generateImage,
+  productphotography,
   reImagine,
   removeBackGround,
+  removetext,
 } from "../controllers/imageController.js";
 import userAuth from "../middlewares/auth.js";
 import cors from "cors";
@@ -38,5 +40,17 @@ imageRouter.post(
   upload.single("image_file"),
   removeBackGround
 );
+imageRouter.post(
+  "/productphotography",
+  userAuth,
+  upload.single("image_file"),
+  productphotography
+);
 
+imageRouter.post(
+  "/removetext",
+  userAuth,
+  upload.single("image_file"),
+  removetext
+);
 export default imageRouter;

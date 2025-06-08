@@ -21,6 +21,7 @@ export const tools = [
       "Generate stunning product photos with realistic shadows and lighting automatically.",
     video:
       "https://static.clipdrop.co/web/apis/product-photography/demo-hd.mp4",
+    path: "/productphotography",
   },
   {
     title: "Reimagine",
@@ -42,6 +43,7 @@ export const tools = [
     description: "Easily erase unwanted text or labels from your images.",
     video:
       "https://static.clipdrop.co/web/apis/remove-text/remove-text-demo.mp4",
+    path: "/removetext",
   },
   {
     title: "Replace Background",

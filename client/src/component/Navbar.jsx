@@ -15,11 +15,14 @@ const Navbar = () => {
         <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={() => navigate("/buycredit")}
-            className="flex items-center gap-2 bg-blue-100 px-4 sm:px-6 py-1.5 sm:py-3 rounded-full hover:scale-105 transition-all duration-700"
+            className="flex items-center gap-1.5 sm:gap-2 bg-blue-100 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:scale-105 transition-all duration-700 text-xs sm:text-sm min-w-0"
           >
-            <img className="w-5" src={assets.credit_star} alt="" />
-            <p>Credit left: {credit}</p>
+            <img className="w-4 sm:w-5" src={assets.credit_star} alt="credit" />
+            <p className="truncate max-w-[100px] sm:max-w-none">
+              Credit left: {credit}
+            </p>
           </button>
+
           <p className="text-gray-600 max-sm:hidden pl-4">Hi, {user.name}</p>
           <div className="relative group">
             <img

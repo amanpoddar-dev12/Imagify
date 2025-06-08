@@ -13,6 +13,8 @@ import Studio from "./pages/Studio";
 import Reimagine from "./component/Feature/Reimagine";
 import Uncrop from "./component/Feature/Uncrop";
 import RemoveBackground from "./component/Feature/RemoveBackground";
+import ProductPhotoGraphy from "./component/Feature/ProductPhotoGraphy";
+import RemoveText from "./component/Feature/RemoveText";
 
 export default function App() {
   const { showLogin } = useContext(AppContext);
@@ -29,6 +31,8 @@ export default function App() {
         <Route path="/studio" element={<Studio />}></Route>
         <Route path="/uncrop" element={<Uncrop />} />
         <Route path="/removebg" element={<RemoveBackground />} />
+        <Route path="/productphotography" element={<ProductPhotoGraphy />} />
+        <Route path="/removetext" element={<RemoveText />} />
       </Routes>
       <Footer />
     </div>

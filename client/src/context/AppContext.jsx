@@ -149,7 +149,12 @@ const AppContextProvider = (props) => {
   const reMoveBackGround = (imageFile) => {
     return handleImageProcessing(imageFile, "/api/image/removebackground");
   };
-
+  const productPhotoGraphy = (imageFile) => {
+    return handleImageProcessing(imageFile, "/api/image/productphotography");
+  };
+  const removetext = (imageFile) => {
+    return handleImageProcessing(imageFile, "/api/image/removetext");
+  };
   const logout = () => {
     localStorage.removeItem("token");
     setToken("");
@@ -175,6 +180,8 @@ const AppContextProvider = (props) => {
     generateImage,
     reImagine,
     reMoveBackGround,
+    productPhotoGraphy,
+    removetext,
   };
 
   return (
