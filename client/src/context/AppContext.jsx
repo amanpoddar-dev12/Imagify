@@ -36,6 +36,7 @@ const AppContextProvider = (props) => {
       // console.log(data);
       if (data.success) {
         loadCreditsData();
+        console.log(data.resultImage);
         return data.resultImage;
       } else {
         toast.error(data.message);
@@ -155,6 +156,33 @@ const AppContextProvider = (props) => {
   const removetext = (imageFile) => {
     return handleImageProcessing(imageFile, "/api/image/removetext");
   };
+
+  const saveImage = async (imageUrl) => {
+    try {
+      const res = await fetch(`${backendUrl}/api/user/save-image`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token"),
+        },
+        body: JSON.stringify({ imageUrl }),
+      });
+
+      const data = await res.json(); // ✅ Fix this line
+      if (data.success) {
+        toast.success("Image saved to your account!");
+        return true; // ✅ return success
+      } else {
+        toast.error(data.message);
+        return false;
+      }
+    } catch (error) {
+      console.error("Error saving image:", error);
+      toast.error("Failed to save image");
+      return false;
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem("token");
     setToken("");
@@ -173,6 +201,7 @@ const AppContextProvider = (props) => {
     backendUrl,
     token,
     setToken,
+    saveImage,
     credit,
     setCredit,
     loadCreditsData,

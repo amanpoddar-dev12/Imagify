@@ -39,6 +39,12 @@ const Navbar = () => {
                   Studio
                 </li>
                 <li
+                  className="hover:bg-slate-200 p-2 cursor-pointer px-2 py-1"
+                  onClick={() => navigate("/savedimage")}
+                >
+                  Saved
+                </li>
+                <li
                   onClick={logout}
                   className="py-1 px-2 cursor-pointer pr-10 hover:bg-slate-200 p-2"
                 >

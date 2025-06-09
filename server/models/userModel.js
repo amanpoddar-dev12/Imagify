@@ -8,7 +8,13 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   creditBalance: { type: Number, default: 5 },
+  savedImages: [
+    {
+      url: { type: String, required: true },
+      createdAt: { type: Date, default: Date.now },
+    },
+  ],
 });
 
-const userModel = mongoose.models.use || mongoose.model("user", userSchema);
+const userModel = mongoose.models.user || mongoose.model("user", userSchema);
 export default userModel;

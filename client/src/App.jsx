@@ -15,6 +15,7 @@ import Uncrop from "./component/Feature/Uncrop";
 import RemoveBackground from "./component/Feature/RemoveBackground";
 import ProductPhotoGraphy from "./component/Feature/ProductPhotoGraphy";
 import RemoveText from "./component/Feature/RemoveText";
+import SavedImagesList from "./pages/SaveImage";
 
 export default function App() {
   const { showLogin } = useContext(AppContext);
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="/buycredit" element={<Credit />} />
         <Route path="/result" element={<Result />} />
         <Route path="/reimagine" element={<Reimagine />} />
+        <Route path="/savedimage" element={<SavedImagesList />} />
         <Route path="/studio" element={<Studio />}></Route>
         <Route path="/uncrop" element={<Uncrop />} />
         <Route path="/removebg" element={<RemoveBackground />} />

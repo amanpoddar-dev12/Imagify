@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { assets } from "../assets/assets";
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
+import SaveImageButton from "../component/Feature/SaveImages";
 const Result = () => {
   const [image, setImage] = useState(assets.sample_img_1);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
@@ -69,6 +70,7 @@ const Result = () => {
           >
             Download
           </a>
+          <SaveImageButton imageUrl={image} />
         </div>
       )}
     </form>
