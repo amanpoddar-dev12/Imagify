@@ -6,7 +6,6 @@ import {
   reImagine,
   removeBackGround,
   removetext,
-  saveimage,
 } from "../controllers/imageController.js";
 import userAuth from "../middlewares/auth.js";
 import cors from "cors";

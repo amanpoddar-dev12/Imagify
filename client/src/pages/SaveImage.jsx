@@ -1,37 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { AppContext } from "../context/AppContext";
-import toast from "react-hot-toast";
 
 const SavedImagesList = () => {
-  const { backendUrl, token } = useContext(AppContext);
-  const [images, setImages] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchSavedImages = async () => {
-    try {
-      const res = await fetch(`${backendUrl}/api/user/saved-images`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          token,
-        },
-      });
-
-      const data = await res.json();
-      console.log(data);
-      if (data.success) {
-        setImages(data?.images || []);
-        // setImages(data.images);
-      } else {
-        toast.error(data.message || "Could not fetch saved images.");
-      }
-    } catch (err) {
-      toast.error("Error loading saved images");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { images, loading, fetchSavedImages } = useContext(AppContext);
 
   useEffect(() => {
     fetchSavedImages();

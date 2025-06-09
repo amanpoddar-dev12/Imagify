@@ -9,6 +9,8 @@ const AppContextProvider = (props) => {
   const [showLogin, setShowLogin] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [credit, setCredit] = useState(false);
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const loadCreditsData = async () => {
@@ -183,6 +185,31 @@ const AppContextProvider = (props) => {
     }
   };
 
+  const fetchSavedImages = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/api/user/saved-images`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          token,
+        },
+      });
+
+      const data = await res.json();
+      console.log(data);
+      if (data.success) {
+        setImages(data?.images || []);
+        // setImages(data.images);
+      } else {
+        toast.error(data.message || "Could not fetch saved images.");
+      }
+    } catch (err) {
+      toast.error("Error loading saved images");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
   const logout = () => {
     localStorage.removeItem("token");
     setToken("");
@@ -211,6 +238,9 @@ const AppContextProvider = (props) => {
     reMoveBackGround,
     productPhotoGraphy,
     removetext,
+    images,
+    loading,
+    fetchSavedImages,
   };
 
   return (
