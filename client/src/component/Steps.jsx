@@ -3,16 +3,16 @@ import { stepsData } from "../assets/assets";
 
 const Steps = () => {
   return (
-    <div className="flex flex-col items-center justify-center my-32 ">
+    <div className="flex flex-col items-center justify-center my-32 dark:text-white">
       <h1 className="text-3xl sm:text-4xl font-semibold mb-2">How it works</h1>
-      <p className="text-lg text-gray-600 mb-8">
+      <p className="text-lg text-gray-600  mb-8">
         Transform Words Into Stunning Images
       </p>
       <div className="space-y-4 w-full max-w-3xl text-sm">
         {stepsData.map((item, index) => (
           <div
             key={index}
-            className="flex items-center gap-4 p-5 px-8 bg-white/20 shadow-md border cursor-pointer hover:scale-[1.02] transition-all duration-300 rounded-lg"
+            className="flex items-center gap-4 p-5 px-8 dark:bg-white/10 bg-white/20 shadow-md border cursor-pointer hover:scale-[1.02] transition-all duration-300 rounded-lg"
           >
             <img src={item.icon} alt="" width={40} />
             <div>

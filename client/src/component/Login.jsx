@@ -6,6 +6,7 @@ import axios from "axios";
 import { AppContext } from "../context/AppContext";
 const Login = () => {
   const [state, setState] = useState("Login");
+  const [loading, setLoading] = useState(false);
   const { setShowLogin, backendUrl, setToken, setUser } =
     useContext(AppContext);
 
@@ -15,7 +16,11 @@ const Login = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    let toastId;
     try {
+      toastId = toast.loading(`${state} in progress...`);
+      setLoading(true);
+
       if (state === "Login") {
         const { data } = await axios.post(backendUrl + "/api/user/login", {
           email,
@@ -26,11 +31,11 @@ const Login = () => {
           setUser(data.user);
           localStorage.setItem("token", data.token);
           setShowLogin(false);
+          toast.success("Logged in successfully", { id: toastId });
         } else {
-          toast.error(data.message);
+          toast.error(data.message, { id: toastId });
         }
       } else {
-        console.log("Error from regiter case");
         const { data } = await axios.post(backendUrl + "/api/user/register", {
           name,
           email,
@@ -41,12 +46,16 @@ const Login = () => {
           setUser(data.user);
           localStorage.setItem("token", data.token);
           setShowLogin(false);
+          toast.success("Account created successfully", { id: toastId });
         } else {
-          toast.error(data.message);
+          toast.error(data.message, { id: toastId });
         }
       }
+
+      setLoading(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message || "Something went wrong", { id: toastId });
+      setLoading(false);
     }
   };
 

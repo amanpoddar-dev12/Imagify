@@ -3,16 +3,16 @@ import { assets, testimonialsData } from "../assets/assets";
 
 const Testimonials = () => {
   return (
-    <div className="flex flex-col items-center justify-center my-20 py-12">
+    <div className="flex flex-col items-center justify-center my-20 py-12 dark:text-white">
       <h1 className="text-3xl sm:text-4xl font-semibold">
         Customer testimonials
       </h1>
-      <p className="text-gray-500 mb-12">What Our Users Are Saying</p>
+      <p className="text-gray-500  mb-12">What Our Users Are Saying</p>
       <div className="flex flex-wrap gap-6">
         {testimonialsData.map((testimonial, index) => (
           <div
             key={index}
-            className="bg-white/20 p-12 rounded-lg shadow-md border w-80 m-auto cursor-pointer hover:scale-[1.02] transition-all"
+            className="dark:bg-white/10 bg-white/20 p-12 rounded-lg shadow-md border w-80 m-auto cursor-pointer hover:scale-[1.02] transition-all"
           >
             <div>
               <img src={testimonial.image} className="rounded-full w-14" />
@@ -25,7 +25,7 @@ const Testimonials = () => {
                     <img key={index} src={assets.rating_star} />
                   ))}
               </div>
-              <p className="text-center text-sm text-gray-600">
+              <p className="text-center text-sm text-gray-600 dark:text-gray-500">
                 {testimonial.text}
               </p>
             </div>

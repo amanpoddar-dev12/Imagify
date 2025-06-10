@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import toast from "react-hot-toast";
 import { AppContext } from "../../context/AppContext";
+import SaveImageButton from "../../services/SaveImages";
 
 function Reimagine() {
   const { reImagine } = useContext(AppContext);
@@ -39,10 +40,9 @@ function Reimagine() {
     setLoading(true);
     try {
       const result = await reImagine(selectedImage);
-      // console.log(result);
       if (result) {
         setReimaginedImageUrl(result);
-        setPreviewUrl(result); // 🔁 Replace original image with new one
+        setPreviewUrl(result);
         toast.success("Image created successfully");
       }
     } catch (error) {
@@ -59,10 +59,9 @@ function Reimagine() {
       </h2>
 
       {/* Image Upload */}
-
       <div className="mt-6">
         {previewUrl ? (
-          <div className="relative rounded overflow-hidden ">
+          <div className="relative rounded overflow-hidden">
             {loading && (
               <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-10">
                 <div className="w-8 h-8 border-4 border-dashed rounded-full animate-spin border-indigo-600"></div>
@@ -95,27 +94,51 @@ function Reimagine() {
           onChange={handleImageUpload}
           className="block mt-12 w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200 mb-4"
         />
-        {/* Button */}
-        <button
-          onClick={handleReimagine}
-          disabled={loading || !selectedImage}
-          className={`w-full  py-2 px-4 rounded bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition ${
-            loading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-        >
-          {loading ? "Generating..." : "Reimagine"}
-        </button>
 
-        {/* Download Button */}
+        {/* Reimagine Button */}
+        <div className="mb-4">
+          <button
+            onClick={handleReimagine}
+            disabled={loading || !selectedImage}
+            className={`w-full py-2 px-4 rounded bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            {loading ? "Generating..." : "Reimagine"}
+          </button>
+        </div>
+
+        {/* Download and Save Buttons */}
         {reimaginedImageUrl && (
-          <div className="mt-4 text-center">
-            <a
-              href={reimaginedImageUrl}
-              download="reimagined-image.jpg"
-              className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded"
-            >
-              Download Image
-            </a>
+          <div className="flex flex-col space-y-3">
+            <div className="text-sm text-gray-500 text-center">
+              Your reimagined image is ready
+            </div>
+            <div className="flex justify-center space-x-3">
+              <a
+                href={reimaginedImageUrl}
+                download="reimagined-image.jpg"
+                className="inline-flex items-center justify-center bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded transition-colors"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 mr-2"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Download
+              </a>
+              <SaveImageButton
+                imageUrl={reimaginedImageUrl}
+                className="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded transition-colors"
+              />
+            </div>
           </div>
         )}
       </div>

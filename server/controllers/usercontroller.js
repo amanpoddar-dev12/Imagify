@@ -3,6 +3,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import razorpay from "razorpay";
 import transactionModel from "../models/transactionModel.js";
+import cloudinary from "../config/cloudinary.js";
+import streamifier from "streamifier";
 
 export const registerUser = async (req, res) => {
   try {
@@ -176,34 +178,50 @@ export const verifyRazorPay = async (req, res) => {
 };
 
 export const saveimage = async (req, res) => {
-  const userId = req.userId; // from JWT payload
-  const { imageUrl } = req.body;
-
-  if (!imageUrl) {
+  const userId = req.userId;
+  if (!req.file) {
     return res
       .status(400)
-      .json({ success: false, message: "Image URL is required" });
+      .json({ success: false, message: "No image file uploaded" });
   }
 
   try {
     const user = await userModel.findById(userId);
-    if (!user)
+    if (!user) {
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
+    }
 
-    user.savedImages.push({ url: imageUrl });
+    // Upload to Cloudinary from buffer
+    const streamUpload = (buffer) => {
+      return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "imagify" },
+          (error, result) => {
+            if (result) resolve(result);
+            else reject(error);
+          }
+        );
+        streamifier.createReadStream(buffer).pipe(stream);
+      });
+    };
+
+    const result = await streamUpload(req.file.buffer);
+    user.savedImages.push({ url: result.secure_url });
     await user.save();
 
-    return res
-      .status(200)
-      .json({ success: true, message: "Image saved successfully" });
+    res.status(200).json({
+      success: true,
+      message: "Image uploaded",
+      imageUrl: result.secure_url,
+    });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ success: false, message: "Server error", error });
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error", error });
   }
 };
+
 export const getSavedImages = async (req, res) => {
   try {
     const user = await userModel.findById(req.userId);

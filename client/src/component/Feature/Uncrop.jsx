@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import toast from "react-hot-toast";
 import { AppContext } from "../../context/AppContext";
+import SaveImageButton from "../../services/SaveImages";
 
 function UnCrop() {
   const { reMoveBackGround } = useContext(AppContext);
@@ -114,6 +115,7 @@ function UnCrop() {
             >
               Download Image
             </a>
+            <SaveImageButton imageUrl={reimaginedImageUrl} />
           </div>
         )}
       </div>

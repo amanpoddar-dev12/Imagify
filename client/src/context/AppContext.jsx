@@ -29,6 +29,7 @@ const AppContextProvider = (props) => {
   };
 
   const generateImage = async (prompt) => {
+    console.log("Inside generate Image");
     try {
       const { data } = await axios.post(
         backendUrl + "/api/image/generate-image",
@@ -38,9 +39,10 @@ const AppContextProvider = (props) => {
       // console.log(data);
       if (data.success) {
         loadCreditsData();
-        console.log(data.resultImage);
+        // console.log(data.resultImage);
         return data.resultImage;
       } else {
+        console.log(data.message);
         toast.error(data.message);
         loadCreditsData();
         if (data.creditBalance === 0) {
@@ -48,74 +50,10 @@ const AppContextProvider = (props) => {
         }
       }
     } catch (error) {
+      console.log(error);
       toast.error(error.message);
     }
   };
-
-  // const reImagine = async (imageFile) => {
-  //   try {
-  //     if (!imageFile) {
-  //       toast.error("Please provide image.");
-  //       return;
-  //     }
-
-  //     const formData = new FormData();
-  //     formData.append("image_file", imageFile);
-  //     // formData.append("prompt", prompt); // ✅ Add this back
-
-  //     const response = await axios.post(
-  //       `${backendUrl}/api/image/reImagine`,
-  //       formData,
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //           token,
-  //         },
-  //       }
-  //     );
-  //     const imageURL = response.data.resultImage;
-  //     loadCreditsData();
-  //     return imageURL;
-  //   } catch (error) {
-  //     console.error("Backend Error:", error.response?.data || error.message);
-  //     toast.error(
-  //       error?.response?.data?.message ||
-  //         "Something went wrong while generating image."
-  //     );
-  //   }
-  // };
-  // const reMoveBackGround = async (imageFile) => {
-  //   try {
-  //     if (!imageFile) {
-  //       toast.error("Please provide image.");
-  //       return;
-  //     }
-
-  //     const formData = new FormData();
-  //     formData.append("image_file", imageFile);
-  //     // formData.append("prompt", prompt); // ✅ Add this back
-
-  //     const response = await axios.post(
-  //       `${backendUrl}/api/image/removebackground`,
-  //       formData,
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //           token,
-  //         },
-  //       }
-  //     );
-  //     const imageURL = response.data.resultImage;
-  //     loadCreditsData();
-  //     return imageURL;
-  //   } catch (error) {
-  //     console.error("Backend Error:", error.response?.data || error.message);
-  //     toast.error(
-  //       error?.response?.data?.message ||
-  //         "Something went wrong while generating image."
-  //     );
-  //   }
-  // };
 
   const handleImageProcessing = async (imageFile, apiPath) => {
     try {
@@ -159,21 +97,23 @@ const AppContextProvider = (props) => {
     return handleImageProcessing(imageFile, "/api/image/removetext");
   };
 
-  const saveImage = async (imageUrl) => {
+  const saveImage = async (imageFile) => {
     try {
+      const formData = new FormData();
+      formData.append("image", imageFile); // 👈 'image' must match Multer field name
+
       const res = await fetch(`${backendUrl}/api/user/save-image`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           token: localStorage.getItem("token"),
         },
-        body: JSON.stringify({ imageUrl }),
+        body: formData,
       });
 
-      const data = await res.json(); // ✅ Fix this line
+      const data = await res.json();
       if (data.success) {
         toast.success("Image saved to your account!");
-        return true; // ✅ return success
+        return true;
       } else {
         toast.error(data.message);
         return false;
@@ -197,6 +137,7 @@ const AppContextProvider = (props) => {
 
       const data = await res.json();
       console.log(data);
+
       if (data.success) {
         setImages(data?.images || []);
         // setImages(data.images);

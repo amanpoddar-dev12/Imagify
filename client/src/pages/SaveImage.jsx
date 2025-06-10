@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { AppContext } from "../context/AppContext";
+import { FiDownload } from "react-icons/fi";
 
 const SavedImagesList = () => {
   const { images, loading, fetchSavedImages } = useContext(AppContext);
@@ -8,7 +9,30 @@ const SavedImagesList = () => {
     fetchSavedImages();
   }, []);
 
+  const handleDownload = async (url, name) => {
+    try {
+      const response = await fetch(url, { mode: "cors" });
+      if (!response.ok) throw new Error("Network response was not ok");
+
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = name || "image.png";
+      document.body.appendChild(link);
+      link.click();
+
+      link.remove();
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Download failed", error);
+      alert("Failed to download image.");
+    }
+  };
+
   if (loading) return <p className="text-center text-gray-500">Loading...</p>;
+
   if (images.length === 0)
     return (
       <p className="text-center text-gray-400">
@@ -28,15 +52,17 @@ const SavedImagesList = () => {
             alt={`Saved #${idx + 1}`}
             className="w-full h-64 object-cover"
           />
-          <div className="p-2 text-sm  text-gray-600 text-center">
-            Saved on {new Date(img.createdAt).toLocaleDateString()}
-            <a
-              href={img.url}
-              download
-              className=" bg-black px-2 py-1 ml-5 text-white rounded-full cursor-pointer"
+          <div className="p-2 text-sm flex justify-between items-center text-gray-600">
+            <span>Saved on {new Date(img.createdAt).toLocaleDateString()}</span>
+            <button
+              onClick={() =>
+                handleDownload(img.url, `saved-image-${idx + 1}.png`)
+              }
+              className="text-black hover:text-blue-600 transition-colors"
+              title="Download Image"
             >
-              Download
-            </a>
+              <FiDownload className="w-5 h-5" />
+            </button>
           </div>
         </div>
       ))}

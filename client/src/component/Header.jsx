@@ -23,7 +23,7 @@ function Header() {
   }
   return (
     <motion.div
-      className="flex flex-col justify-center items-center text-center my-20"
+      className="flex flex-col justify-center items-center text-center my-20 dark:text-white"
       initial={{ opacity: 0.5, y: 100 }}
       transition={{ duration: 1 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -55,7 +55,7 @@ function Header() {
       </motion.p>
       <div className="lg:flex lg:gap-6  ">
         <motion.button
-          className="sm:text-lg   text-black border border-black w-auto mt-8 px-12 py-2.5 flex items-center gap-2  rounded-full"
+          className="sm:text-lg dark:text-white dark:border-white  text-black border border-black w-auto mt-8 px-12 py-2.5 flex items-center gap-2  rounded-full"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           initial={{ opacity: 0 }}
@@ -70,7 +70,7 @@ function Header() {
           {/* <img className="h-6" src={assets.star_group} alt="" /> */}
         </motion.button>
         <motion.button
-          className="sm:text-lg text-white bg-black w-auto mt-8 px-12 py-2.5 flex items-center gap-2 rounded-full"
+          className="sm:text-lg text-white dark:bg-white dark:border-black dark:text-black  bg-black w-auto mt-8 px-12 py-2.5 flex items-center gap-2 rounded-full"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           initial={{ opacity: 0 }}
@@ -104,7 +104,7 @@ function Header() {
           ))}
       </motion.div>
       <motion.p
-        className="mt-2 text-neutral-600"
+        className="mt-2 text-neutral-600 dark:text-white"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2, duration: 0.8 }}
