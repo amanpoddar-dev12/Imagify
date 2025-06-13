@@ -41,18 +41,18 @@ const SavedImagesList = () => {
     );
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4 ">
       {images.map((img, idx) => (
         <div
           key={idx}
-          className="bg-white shadow-md rounded-lg overflow-hidden"
+          className="bg-white shadow-md rounded-lg overflow-hidden dark:border dark:border-blue-900"
         >
           <img
             src={img.url}
             alt={`Saved #${idx + 1}`}
             className="w-full h-64 object-cover"
           />
-          <div className="p-2 text-sm flex justify-between items-center text-gray-600">
+          <div className="p-2 text-sm flex justify-between items-center text-gray-600 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
             <span>Saved on {new Date(img.createdAt).toLocaleDateString()}</span>
             <button
               onClick={() =>
@@ -61,7 +61,7 @@ const SavedImagesList = () => {
               className="text-black hover:text-blue-600 transition-colors"
               title="Download Image"
             >
-              <FiDownload className="w-5 h-5" />
+              <FiDownload className="w-5 h-5 dark:text-white" />
             </button>
           </div>
         </div>

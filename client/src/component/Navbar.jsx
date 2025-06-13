@@ -14,7 +14,7 @@ const Navbar = () => {
      "
     >
       <Link to={"/"}>
-        <div className="flex gap-2">
+        <div className="flex gap-2 ">
           <img
             src={assets.logo_icon}
             alt="Logo"
@@ -44,10 +44,10 @@ const Navbar = () => {
           <p className="text-gray-600 max-sm:hidden pl-4 dark:text-gray-300 transition-colors duration-300">
             Hi, {user.name}
           </p>
-          <div className="relative group">
+          <div className="relative group ">
             <img
               src={assets.profile_icon}
-              className="w-10 drop-shadow dark:invert transition-colors duration-300"
+              className="w-10 drop-shadow  transition-colors duration-300 "
               alt="Profile"
             />
             <div className="absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-12 transition-all duration-300">

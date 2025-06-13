@@ -2,19 +2,19 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 export const tools = [
-  {
-    title: "Cleanup",
-    description:
-      "Remove unwanted objects, people, or defects from your images with AI-powered precision.",
-    video: "https://static.clipdrop.co/web/apis/cleanup/cleanup-demo.mp4",
-  },
-  {
-    title: "Image Upscaling",
-    description:
-      "Enhance the resolution of your images without losing quality.",
-    video:
-      "https://static.clipdrop.co/web/apis/super-resolution/super-resolution-demo.mp4",
-  },
+  // {
+  //   title: "Cleanup",
+  //   description:
+  //     "Remove unwanted objects, people, or defects from your images with AI-powered precision.",
+  //   video: "https://static.clipdrop.co/web/apis/cleanup/cleanup-demo.mp4",
+  // },
+  // {
+  //   title: "Image Upscaling",
+  //   description:
+  //     "Enhance the resolution of your images without losing quality.",
+  //   video:
+  //     "https://static.clipdrop.co/web/apis/super-resolution/super-resolution-demo.mp4",
+  // },
   {
     title: "Product Photography",
     description:
@@ -38,26 +38,26 @@ export const tools = [
       "https://static.clipdrop.co/web/apis/remove-background/remove-background-demo.mp4",
     path: "/removebg",
   },
-  {
-    title: "Remove Text",
-    description: "Easily erase unwanted text or labels from your images.",
-    video:
-      "https://static.clipdrop.co/web/apis/remove-text/remove-text-demo.mp4",
-    path: "/removetext",
-  },
-  {
-    title: "Replace Background",
-    description:
-      "Swap the background of any image with a new one effortlessly.",
-    video:
-      "https://storage.googleapis.com/clipdrop-static-assets/web/apis/homepage/replace-background.mp4",
-  },
-  {
-    title: "Text Inpainting",
-    description:
-      "Replace or alter parts of your image using natural language prompts.",
-    video: "https://static.clipdrop.co/web/apis/inpainting/inpainting.mp4",
-  },
+  // {
+  //   title: "Remove Text",
+  //   description: "Easily erase unwanted text or labels from your images.",
+  //   video:
+  //     "https://static.clipdrop.co/web/apis/remove-text/remove-text-demo.mp4",
+  //   path: "/removetext",
+  // },
+  // {
+  //   title: "Replace Background",
+  //   description:
+  //     "Swap the background of any image with a new one effortlessly.",
+  //   video:
+  //     "https://storage.googleapis.com/clipdrop-static-assets/web/apis/homepage/replace-background.mp4",
+  // },
+  // {
+  //   title: "Text Inpainting",
+  //   description:
+  //     "Replace or alter parts of your image using natural language prompts.",
+  //   video: "https://static.clipdrop.co/web/apis/inpainting/inpainting.mp4",
+  // },
   {
     title: "Text to Image",
     description:
@@ -65,14 +65,14 @@ export const tools = [
     video:
       "https://storage.googleapis.com/clipdrop-static-assets/web/apis/text-to-image/text-to-image-1280-720.mp4",
   },
-  {
-    title: "Uncrop",
-    description:
-      "Extend the boundaries of your image intelligently using content-aware fill.",
-    video:
-      "https://storage.googleapis.com/clipdrop-static-assets/web/apis/uncrop/flowers-uncrop-high-res.webm",
-    path: "/uncrop",
-  },
+  // {
+  //   title: "Uncrop",
+  //   description:
+  //     "Extend the boundaries of your image intelligently using content-aware fill.",
+  //   video:
+  //     "https://storage.googleapis.com/clipdrop-static-assets/web/apis/uncrop/flowers-uncrop-high-res.webm",
+  //   path: "/uncrop",
+  // },
 ];
 
 const Studio = () => {
@@ -85,7 +85,7 @@ const Studio = () => {
           <div
             onClick={() => navigate(tool?.path)}
             key={index}
-            className="bg-white rounded-xl shadow-md overflow-hidden border hover:shadow-lg transition duration-300"
+            className="bg-white rounded-xl shadow-md overflow-hidden border hover:shadow-lg transition duration-300 dark:text-white dark:border-blue-900 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 "
           >
             <div className="aspect-video">
               <video

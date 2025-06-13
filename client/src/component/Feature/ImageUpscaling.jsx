@@ -53,7 +53,7 @@ function ImageUpscaling() {
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
+    <div className="p-6 max-w-xl mx-auto ">
       <h2 className="text-2xl font-semibold mb-4 text-center">
         ImageUpscaling
       </h2>

@@ -1,13 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { assets, plans } from "../assets/assets";
 import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+
 import axios from "axios";
 
 const Credit = () => {
   const { user, backendUrl, loadCreditsData, token, setShowLogin } =
     useContext(AppContext);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const initPay = async (order) => {
     const options = {
@@ -43,25 +45,33 @@ const Credit = () => {
   };
   const paymentRazorPay = async (planId) => {
     console.log("Inside paymentRazor");
-    user;
+
+    if (!user) {
+      setShowLogin(true);
+      return;
+    }
+
+    const toastId = toast.loading("Processing payment..."); // show loading toast
+    setLoading(true);
+
     try {
-      if (!user) {
-        setShowLogin(true);
-      }
       const { data } = await axios.post(
         backendUrl + "/api/user/pay-razor",
         { planId },
         { headers: { token } }
       );
 
-      data;
       if (data.success) {
-        initPay(data.order);
+        await initPay(data.order);
       }
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      toast.dismiss(toastId); // hide loading toast
+      setLoading(false);
     }
   };
+
   return (
     <div className="mih-h-[80vh] text-center pt-14 mb-10">
       <button className="border border-gray-400 px-10 py-2 rounded-full mb-6 ">
@@ -81,7 +91,7 @@ const Credit = () => {
             <p className="mt-3 mb-1 font-semibold">{item.id}</p>
             <p className="mt-sm">{item.desc}</p>
             <p className="mt-6">
-              <span className="text-3xl font-medium">$ {item.price}</span>/
+              <span className="text-3xl font-medium">₹ {item.price}</span>/
               {item.credits} credits
             </p>
             <button
