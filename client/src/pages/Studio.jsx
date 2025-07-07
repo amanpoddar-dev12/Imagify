@@ -28,14 +28,13 @@ export const tools = [
     description:
       "Generate creative variations of your image based on AI imagination.",
     video:
-      "https://static.clipdrop.co/web/apis/reimagine/reimagine-1280-720.mp4",
+      "https://static.clipdrop.co/web/homepage/tools/ImageVariation.webm#t=0.1",
     path: "/reimagine",
   },
   {
     title: "Remove Background",
     description: "Automatically remove background from any image in seconds.",
-    video:
-      "https://static.clipdrop.co/web/apis/remove-background/remove-background-demo.mp4",
+    video: "https://static.clipdrop.co/web/homepage/tools/RemoveBG.webm#t=0.1",
     path: "/removebg",
   },
   // {
@@ -63,7 +62,7 @@ export const tools = [
     description:
       "Create realistic images from just a text description using AI.",
     video:
-      "https://storage.googleapis.com/clipdrop-static-assets/web/apis/text-to-image/text-to-image-1280-720.mp4",
+      "https://static.clipdrop.co/web/homepage/tools/StableDiffusion-1.0.webm#t=0.1",
   },
   // {
   //   title: "Uncrop",

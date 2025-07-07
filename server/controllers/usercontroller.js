@@ -5,7 +5,8 @@ import razorpay from "razorpay";
 import transactionModel from "../models/transactionModel.js";
 import cloudinary from "../config/cloudinary.js";
 import streamifier from "streamifier";
-
+import { sendPasswordResetEmail } from "../mailtrap/emails.js";
+import User from "../models/users.js";
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -29,6 +30,21 @@ export const registerUser = async (req, res) => {
   }
 };
 
+export const adminLogin = async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+    return res.status(401).json({ message: "Invalid credentials" });
+  }
+
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
+
+  res.json({ token, role: user.role });
+};
+
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -50,7 +66,37 @@ export const loginUser = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 };
+export const forgetPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User not found" });
+    }
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000;
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpiresAt = resetTokenExpiresAt;
+    await user.save();
 
+    await sendPasswordResetEmail(
+      user.email,
+      `http://localhost:${process.env.PORT}/reset-password/${resetToken}`
+    );
+    res.status(200).json({
+      success: true,
+      message: "Password reset link sent to your email",
+    });
+  } catch (error) {
+    console.log(`error in forget password ${error}`);
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 export const userCredits = async (req, res) => {
   try {
     const userId = req.userId;

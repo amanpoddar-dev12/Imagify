@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: imagify-backend
+    ports:
+      - '5000:5000'
+    env_file:
+      - ./server/.env
+    depends_on:
+      - mongo
+    volumes:
+      - ./server:/app
+      - /app/node_modules 
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: imagify-frontend
+    ports:
+      - '3000:5173' # For Vite
+    env_file:
+      - ./client/.env
+    depends_on:
+      - backend
+    volumes:
+      - ./client:/app
+      - /app/node_modules 
+    command: npm run dev -- --host 0.0.0.0
+
+  mongo:
+    image: mongo
+    container_name: imagify-mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

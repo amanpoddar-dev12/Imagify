@@ -1,10 +1,12 @@
 import React, { useEffect, useContext } from "react";
 import { AppContext } from "../context/AppContext";
-import { FiDownload } from "react-icons/fi";
+import { FiDownload, FiShare, FiShare2 } from "react-icons/fi";
+import ShareGroup from "../services/ShareGroup";
+import { useState } from "react";
+import ShareList from "../services/ShareList";
 
 const SavedImagesList = () => {
   const { images, loading, fetchSavedImages } = useContext(AppContext);
-
   useEffect(() => {
     fetchSavedImages();
   }, []);
@@ -54,15 +56,16 @@ const SavedImagesList = () => {
           />
           <div className="p-2 text-sm flex justify-between items-center text-gray-600 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
             <span>Saved on {new Date(img.createdAt).toLocaleDateString()}</span>
-            <button
+            {/* <button
               onClick={() =>
                 handleDownload(img.url, `saved-image-${idx + 1}.png`)
               }
               className="text-black hover:text-blue-600 transition-colors"
               title="Download Image"
-            >
-              <FiDownload className="w-5 h-5 dark:text-white" />
-            </button>
+            > */}
+            {/* <FiDownload className="w-5 h-5 dark:text-white" /> */}
+            <ShareList />
+            {/* </button> */}
           </div>
         </div>
       ))}

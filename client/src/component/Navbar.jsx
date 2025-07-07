@@ -6,7 +6,8 @@ import DarkModeToggle from "../services/DarkModeToggle";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { user, setShowLogin, logout, credit } = useContext(AppContext);
+  const { user, setShowLogin, logout, credit, profilePicture } =
+    useContext(AppContext);
 
   return (
     <div
@@ -40,16 +41,17 @@ const Navbar = () => {
               Credit left: {credit}
             </p>
           </button>
-
           <p className="text-gray-600 max-sm:hidden pl-4 dark:text-gray-300 transition-colors duration-300">
             Hi, {user.name}
           </p>
           <div className="relative group ">
-            <img
-              src={assets.profile_icon}
-              className="w-10 drop-shadow  transition-colors duration-300 "
-              alt="Profile"
-            />
+            <div className="rounded-full">
+              <img
+                src={profilePicture ? profilePicture : assets.profile_icon}
+                className="w-10 drop-shadow  transition-colors duration-300  "
+                alt="Profile"
+              />
+            </div>
             <div className="absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-12 transition-all duration-300">
               <ul className="list-none m-0 p-2 bg-white rounded-md border text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white transition-colors duration-300">
                 <DarkModeToggle />

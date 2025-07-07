@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 const AppContextProvider = (props) => {
   const [user, setUser] = useState(null);
+  const [profilePicture, setProfilePicture] = useState("");
   const [showLogin, setShowLogin] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [credit, setCredit] = useState(false);
@@ -175,6 +176,8 @@ const AppContextProvider = (props) => {
     loadCreditsData,
     logout,
     generateImage,
+    profilePicture,
+    setProfilePicture,
     reImagine,
     reMoveBackGround,
     productPhotoGraphy,

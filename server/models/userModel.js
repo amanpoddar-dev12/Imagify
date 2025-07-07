@@ -8,6 +8,15 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   creditBalance: { type: Number, default: 5 },
+  resetPasswordToken: String,
+  resetPasswordExpiresAt: Date,
+  verificationToken: String,
+  verificationTokenExpiresAt: Date,
+  profile: String,
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
   savedImages: [
     {
       url: { type: String, required: true },

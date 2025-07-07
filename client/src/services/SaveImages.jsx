@@ -66,7 +66,6 @@ const SaveImageButton = ({ imageUrl }) => {
       }`}
     >
       {icon}
-
       {/* Tooltip */}
       {!saved && !loading && (
         <div className="absolute bottom-full mb-1 px-2 py-1 text-xs text-white bg-black rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
