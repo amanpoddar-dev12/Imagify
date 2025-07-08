@@ -42,12 +42,12 @@ const Navbar = () => {
             </p>
           </button>
           <p className="text-gray-600 max-sm:hidden pl-4 dark:text-gray-300 transition-colors duration-300">
-            Hi, {user.name}
+            Hi, {user.name ? user.name : "User"}
           </p>
           <div className="relative group ">
             <div className="rounded-full">
               <img
-                src={profilePicture ? profilePicture : assets.profile_icon}
+                src={assets.profile_icon}
                 className="w-10 drop-shadow  transition-colors duration-300  "
                 alt="Profile"
               />

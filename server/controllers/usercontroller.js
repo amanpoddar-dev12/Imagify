@@ -9,23 +9,37 @@ import { sendPasswordResetEmail } from "../mailtrap/emails.js";
 import User from "../models/users.js";
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password = "firebase" } = req.body;
+
     if (!name || !email || !password) {
-      return res.json({ sucess: false, message: "Missing Details" });
+      return res.json({ success: false, message: "Missing Details" });
     }
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Check if user already exists
+    const existingUser = await userModel.findOne({ email });
+    if (existingUser) {
+      return res.json({ success: false, message: "User already exists" });
+    }
+
+    const hashedPassword =
+      password === "firebase"
+        ? "firebase" // use a fixed string to indicate social/Firebase login
+        : await bcrypt.hash(password, await bcrypt.genSalt(10));
+
     const userData = {
       name,
       email,
       password: hashedPassword,
+      isVerified: false, // You can update this later if needed
     };
+
     const newUser = new userModel(userData);
     const user = await newUser.save();
+
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     res.json({ success: true, token, user: { name: user.name } });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.json({ success: false, message: error.message });
   }
 };

@@ -12,6 +12,13 @@ router.post("/social-login", async (req, res) => {
   try {
     // 1. Verify token from Firebase
     const decoded = await admin.auth().verifyIdToken(idToken);
+    // const decoded = await admin.auth().verifyIdToken(idToken);
+
+    if (!decoded.email_verified) {
+      return res
+        .status(403)
+        .json({ success: false, message: "Email not verified" });
+    }
 
     const { uid, email, name, picture } = decoded;
     console.log(uid, email, name, picture);
