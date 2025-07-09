@@ -182,12 +182,21 @@ npm run build
 
 ## 🛠️ Admin Panel Features
 
+<<<<<<< HEAD
 | Feature             | Description                                     |
 | ------------------- | ----------------------------------------------- |
 | 📊 Dashboard        | Overview of users, uploads, storage             |
 | 👥 User Management  | Edit/delete users                               |
 | 🖼️ Image Moderation | Remove or report harmful/inappropriate content  |
 | ⚙️ Settings         | Upload size limits, block users, system toggles |
+=======
+| Feature              | Description                                     |
+| -------------------- | ----------------------------------------------- |
+| 📊 Dashboard         | Overview of users, uploads, storage             |
+| 👥 User Management   | Edit/delete users                               |
+| 🖼️ Image Moderation | Remove or report harmful/inappropriate content  |
+| ⚙️ Settings          | Upload size limits, block users, system toggles |
+>>>>>>> 516d41b25b0a15af08a789fa3a13b6aac7efb6bb
 
 ---
 
@@ -241,3 +250,7 @@ See the [LICENSE](./LICENSE) file for more details.
 ---
 
 > Built with ❤️ using the MERN Stack, Tailwind CSS, and Cloudinary
+<<<<<<< HEAD
+=======
+
+>>>>>>> 516d41b25b0a15af08a789fa3a13b6aac7efb6bb
