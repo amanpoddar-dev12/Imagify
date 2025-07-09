@@ -23,14 +23,14 @@ export const tools = [
       "https://static.clipdrop.co/web/apis/product-photography/demo-hd.mp4",
     path: "/productphotography",
   },
-  {
-    title: "Reimagine",
-    description:
-      "Generate creative variations of your image based on AI imagination.",
-    video:
-      "https://static.clipdrop.co/web/homepage/tools/ImageVariation.webm#t=0.1",
-    path: "/reimagine",
-  },
+  // {
+  //   title: "Reimagine",
+  //   description:
+  //     "Generate creative variations of your image based on AI imagination.",
+  //   video:
+  //     "https://static.clipdrop.co/web/homepage/tools/ImageVariation.webm#t=0.1",
+  //   path: "/reimagine",
+  // },
   {
     title: "Remove Background",
     description: "Automatically remove background from any image in seconds.",
@@ -57,13 +57,13 @@ export const tools = [
   //     "Replace or alter parts of your image using natural language prompts.",
   //   video: "https://static.clipdrop.co/web/apis/inpainting/inpainting.mp4",
   // },
-  {
-    title: "Text to Image",
-    description:
-      "Create realistic images from just a text description using AI.",
-    video:
-      "https://static.clipdrop.co/web/homepage/tools/StableDiffusion-1.0.webm#t=0.1",
-  },
+  // {
+  //   title: "Text to Image",
+  //   description:
+  //     "Create realistic images from just a text description using AI.",
+  //   video:
+  //     "https://static.clipdrop.co/web/homepage/tools/StableDiffusion-1.0.webm#t=0.1",
+  // },
   // {
   //   title: "Uncrop",
   //   description:

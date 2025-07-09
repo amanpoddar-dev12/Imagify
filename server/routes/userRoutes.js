@@ -18,6 +18,7 @@ userRouter.post("/register", registerUser);
 userRouter.post("/login", loginUser);
 userRouter.post("/forget-password", forgetPassword);
 userRouter.get("/credits", userAuth, userCredits);
+userRouter.get("/admin-login", userAuth, adminLogin);
 userRouter.get("/saved-images", userAuth, getSavedImages);
 userRouter.post("/save-image", userAuth, upload.single("image"), saveimage);
 userRouter.post("/pay-razor", userAuth, paymentRazorPay);

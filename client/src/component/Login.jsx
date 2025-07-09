@@ -31,56 +31,66 @@ const Login = () => {
     e.preventDefault();
     let toastId;
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return toast.error("Please enter a valid email address.");
-    }
-
-    if (password.length < 6) {
-      return toast.error("Password must be at least 6 characters.");
-    }
-    if (!/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
-      return toast.error(
-        "Password must contain at least one uppercase letter and one number."
-      );
-    }
-
     try {
       toastId = toast.loading(`${state} in progress...`);
       setLoading(true);
 
       if (state === "Login") {
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
+        // 🔐 Admin login flow
+        if (loginAsAdmin) {
+          const { data } = await axios.post(
+            `${backendUrl}/api/user/admin-login`,
+            {
+              email,
+              password,
+            }
+          );
 
-        if (!userCredential.user.emailVerified) {
-          toast.error("Please verify your email before logging in.", {
-            id: toastId,
-          });
-          setLoading(false);
-          return;
-        }
-
-        const idToken = await userCredential.user.getIdToken();
-
-        const { data } = await axios.post(
-          backendUrl + "/api/firebase-auth/social-login",
-          { idToken }
-        );
-
-        if (data.success) {
-          setToken(data.token);
-          setUser(data.user);
-          localStorage.setItem("token", data.token);
-          setShowLogin(false);
-          toast.success("Logged in successfully", { id: toastId });
+          if (data?.token && data?.role === "admin") {
+            setToken(data.token);
+            setUser({ name: "Admin" });
+            localStorage.setItem("token", data.token);
+            setShowLogin(false);
+            toast.success("Admin logged in successfully", { id: toastId });
+            window.location.href = "/admin"; // redirect to admin dashboard
+            return;
+          } else {
+            toast.error("Invalid admin credentials", { id: toastId });
+          }
         } else {
-          toast.error(data.message, { id: toastId });
+          // 🔁 Regular user login
+          const userCredential = await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+          if (!userCredential.user.emailVerified) {
+            toast.error("Please verify your email before logging in.", {
+              id: toastId,
+            });
+            setLoading(false);
+            return;
+          }
+
+          const idToken = await userCredential.user.getIdToken();
+          const { data } = await axios.post(
+            backendUrl + "/api/firebase-auth/social-login",
+            { idToken }
+          );
+
+          if (data.success) {
+            setToken(data.token);
+            setUser(data.user);
+            localStorage.setItem("token", data.token);
+            setShowLogin(false);
+            toast.success("Logged in successfully", { id: toastId });
+          } else {
+            toast.error(data.message, { id: toastId });
+          }
         }
       } else {
+        // 🔁 Signup flow (unchanged)
         const userCredential = await createUserWithEmailAndPassword(
           auth,
           email,
@@ -88,12 +98,9 @@ const Login = () => {
         );
 
         await sendEmailVerification(userCredential.user);
-        setCreatedUser(userCredential.user); // ✅ Save to resend
-        setShowResendVerification(true); // ✅ Show button
+        setShowResendVerification(true);
 
-        toast.success("Verification email sent! Please check your inbox.", {
-          id: toastId,
-        });
+        toast.success("Verification email sent!", { id: toastId });
 
         await axios.post(`${backendUrl}/api/user/register`, {
           name,
@@ -101,8 +108,8 @@ const Login = () => {
           password: "firebase",
         });
 
-        // ❌ Don't auto-close, keep on Sign Up
-        // ✅ Keep state: Sign Up
+        // setShowLogin(false);
+        setState("Login");
       }
 
       setLoading(false);
@@ -200,6 +207,19 @@ const Login = () => {
             />
           </div>
         )}
+        {/* {state === "Login" && (
+          <div className="flex items-center gap-2 mt-2">
+            <input
+              type="checkbox"
+              id="admin-login"
+              checked={loginAsAdmin}
+              onChange={(e) => setLoginAsAdmin(e.target.checked)}
+            />
+            <label htmlFor="admin-login" className="text-sm text-gray-600">
+              Login as Admin
+            </label>
+          </div>
+        )} */}
 
         {/* {state === "Login" && (
           <p

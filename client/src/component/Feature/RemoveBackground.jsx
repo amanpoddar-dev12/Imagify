@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import toast from "react-hot-toast";
 import { AppContext } from "../../context/AppContext";
+import SaveImageButton from "../../services/SaveImages";
 
 function Reimagine() {
   const { reMoveBackGround } = useContext(AppContext);
@@ -116,6 +117,10 @@ function Reimagine() {
             >
               Download Image
             </a>
+            <SaveImageButton
+              imageUrl={reimaginedImageUrl}
+              className="bg-zinc-900 hover:bg-zinc-800 px-6 py-3 rounded-full cursor-pointer transition-colors"
+            />
           </div>
         )}
       </div>

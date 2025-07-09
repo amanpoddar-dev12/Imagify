@@ -9,7 +9,7 @@ import { sendPasswordResetEmail } from "../mailtrap/emails.js";
 import User from "../models/users.js";
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password = "firebase" } = req.body;
+    const { name, email, password = "firebase", role = "user" } = req.body;
 
     if (!name || !email || !password) {
       return res.json({ success: false, message: "Missing Details" });
@@ -30,7 +30,8 @@ export const registerUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      isVerified: false, // You can update this later if needed
+      isVerified: false,
+      role, // You can update this later if needed
     };
 
     const newUser = new userModel(userData);
@@ -42,21 +43,6 @@ export const registerUser = async (req, res) => {
     console.error(error);
     res.json({ success: false, message: error.message });
   }
-};
-
-export const adminLogin = async (req, res) => {
-  const { email, password } = req.body;
-
-  const user = await User.findOne({ email });
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    return res.status(401).json({ message: "Invalid credentials" });
-  }
-
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "7d",
-  });
-
-  res.json({ token, role: user.role });
 };
 
 export const loginUser = async (req, res) => {
@@ -111,6 +97,7 @@ export const forgetPassword = async (req, res) => {
     });
   }
 };
+
 export const userCredits = async (req, res) => {
   try {
     const userId = req.userId;
@@ -288,5 +275,43 @@ export const getSavedImages = async (req, res) => {
     res.json({ success: true, images: user.savedImages });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const adminLogin = async (req, res) => {
+  const { email, password } = req.body;
+  console.log("Inside admin Login");
+  try {
+    const user = await User.findOne({ email });
+    console.log(user);
+    if (!user) {
+      console.log("User not present");
+      return res.status(401).json({ message: "Admin not found" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      console.log("user unmatched");
+      return res.status(401).json({ message: "Invalid password" });
+    }
+
+    if (user.role !== "admin") {
+      console.log("User not admin");
+      return res.status(403).json({ message: "Access denied: Not an admin" });
+    }
+
+    const token = jwt.sign(
+      { id: user._id, role: "admin" },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
+
+    return res
+      .status(200)
+      .json({ token, role: user.role, user: { name: user.name } });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 };
