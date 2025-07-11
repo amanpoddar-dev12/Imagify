@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import { FiDownload, FiShare, FiShare2 } from "react-icons/fi";
-import ShareGroup from "../services/ShareGroup";
+// import ShareGroup from "../services/ShareGroup";
 import { useState } from "react";
 import ShareList from "../services/ShareList";
 
