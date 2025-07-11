@@ -5,15 +5,16 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const serviceAccountPath = path.resolve("./config/firebaseServiceKey.json");
-console.log(serviceAccountPath);
-if (!fs.existsSync(serviceAccountPath)) {
-  throw new Error(
-    "Firebase service key file not found at: " + serviceAccountPath
-  );
-}
+let serviceAccount;
 
-const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf8"));
+if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+  // Production on Render
+  serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+} else {
+  // Local development
+  const serviceAccountPath = path.resolve("./config/firebaseServiceKey.json");
+  serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf8"));
+}
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
