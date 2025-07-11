@@ -8,7 +8,6 @@ import Footer from "./component/Footer";
 import Login from "./component/Login";
 import { useContext } from "react";
 import { AppContext } from "./context/AppContext";
-import ImageEnhancer from "./component/Feature/Reimagine";
 import Studio from "./pages/Studio";
 import Reimagine from "./component/Feature/Reimagine";
 import Uncrop from "./component/Feature/Uncrop";
@@ -16,8 +15,6 @@ import RemoveBackground from "./component/Feature/RemoveBackground";
 import ProductPhotoGraphy from "./component/Feature/ProductPhotoGraphy";
 import RemoveText from "./component/Feature/RemoveText";
 import SavedImagesList from "./pages/SaveImage";
-import ProtectedRoute from "./component/ProtectedRoute";
-import { AdminDashboard } from "./pages/AdminDashboard";
 
 export default function App() {
   const { showLogin } = useContext(AppContext);
@@ -37,14 +34,6 @@ export default function App() {
         <Route path="/removebg" element={<RemoveBackground />} />
         <Route path="/productphotography" element={<ProductPhotoGraphy />} />
         <Route path="/removetext" element={<RemoveText />} />
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute allowedRoles={["admin", "superadmin"]}>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
       </Routes>
       <Footer />
     </div>

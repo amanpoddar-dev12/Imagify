@@ -6,6 +6,7 @@ import userRouter from "./routes/userRoutes.js";
 import imageRouter from "./routes/imageRoutes.js";
 import dotenv from "dotenv";
 import firebaseAuthRoute from "./routes/firebaseAuth.js";
+
 dotenv.config();
 
 const app = express();
@@ -27,5 +28,6 @@ await connectDB();
 app.use("/api/user", userRouter);
 app.use("/api/image", imageRouter);
 app.use("/api/firebase-auth", firebaseAuthRoute);
+
 app.get("/", (req, res) => res.send("API working"));
 app.listen(PORT, () => console.log("Server running on port " + PORT));

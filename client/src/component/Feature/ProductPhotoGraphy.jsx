@@ -59,8 +59,6 @@ function ProductPhotoGraphy() {
         Product PhotoGraphy
       </h2>
 
-      {/* Image Upload */}
-
       <div className="mt-6">
         {previewUrl ? (
           <div className="relative rounded overflow-hidden ">

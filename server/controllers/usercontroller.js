@@ -5,8 +5,7 @@ import razorpay from "razorpay";
 import transactionModel from "../models/transactionModel.js";
 import cloudinary from "../config/cloudinary.js";
 import streamifier from "streamifier";
-import { sendPasswordResetEmail } from "../mailtrap/emails.js";
-import User from "../models/users.js";
+
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password = "firebase", role = "user" } = req.body;
@@ -123,8 +122,7 @@ export const paymentRazorPay = async (req, res) => {
   try {
     const { planId } = req.body;
     const userId = req.userId;
-    // (req.userId);
-    // ✅ Check for missing details first
+
     userId, planId;
     if (!userId || !planId) {
       return res.json({
@@ -168,7 +166,6 @@ export const paymentRazorPay = async (req, res) => {
       date,
     };
 
-    // ✅ Ensure transaction is created before calling Razorpay
     const newTransaction = await transactionModel.create(transactionData);
 
     const options = {
@@ -177,7 +174,6 @@ export const paymentRazorPay = async (req, res) => {
       receipt: newTransaction._id.toString(),
     };
 
-    // ✅ Wrap Razorpay order creation in a promise to avoid double response
     razorpayInstance.orders.create(options, (error, order) => {
       if (error) {
         console.error("Razorpay Error:", error);
@@ -187,7 +183,7 @@ export const paymentRazorPay = async (req, res) => {
     });
   } catch (error) {
     console.error("Server Error:", error);
-    // ✅ Only send one response
+
     return res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -275,43 +271,5 @@ export const getSavedImages = async (req, res) => {
     res.json({ success: true, images: user.savedImages });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
-  }
-};
-
-export const adminLogin = async (req, res) => {
-  const { email, password } = req.body;
-  console.log("Inside admin Login");
-  try {
-    const user = await User.findOne({ email });
-    console.log(user);
-    if (!user) {
-      console.log("User not present");
-      return res.status(401).json({ message: "Admin not found" });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      console.log("user unmatched");
-      return res.status(401).json({ message: "Invalid password" });
-    }
-
-    if (user.role !== "admin") {
-      console.log("User not admin");
-      return res.status(403).json({ message: "Access denied: Not an admin" });
-    }
-
-    const token = jwt.sign(
-      { id: user._id, role: "admin" },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "7d",
-      }
-    );
-
-    return res
-      .status(200)
-      .json({ token, role: user.role, user: { name: user.name } });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
   }
 };
