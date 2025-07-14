@@ -1,6 +1,6 @@
 # 📸 Imagify — Your Ultimate Image Upload & Sharing Platform
 
-Imagify is a modern full-stack image management web application that allows users to effortlessly upload, transform, manage, and share images across various platforms. Designed with scalability, speed, and user-friendliness in mind, Imagify leverages the power of cloud storage and modern UI/UX principles to deliver a seamless experience.
+Imagify is a modern full-stack image management web application that allows users to effortlessly upload, transform, manage, and share images across various platforms. Designed with scalability, speed, and user-friendliness in mind, Imagify leverages cloud storage, Firebase, and modern UI/UX principles to deliver a seamless experience.
 
 ---
 
@@ -8,21 +8,15 @@ Imagify is a modern full-stack image management web application that allows user
 
 ### 👤 User-Side
 
-- 🔐 Signup/Login with Email & Google OAuth
-- ☁️ Drag-and-drop image uploading
-- ✨ Resize, crop, compress, apply filters
-- 🏷️ Add descriptions, tags, titles
-- 📤 One-click social sharing
-- 🔍 Search & filter by tags, name, date
-- 🗂️ Organize with albums/folders
-- 🔗 Copy image URL & download
-
-### 🔧 Admin Panel
-
-- 📊 Dashboard with stats (uploads, users, storage)
-- 👥 User account management
-- 🖼️ Image moderation (delete flagged content)
-- ⚙️ Upload limits, transformation settings, maintenance toggle
+* 🔐 Signup/Login with Email, Google, **GitHub OAuth via Firebase**
+* ☁️ Drag-and-drop image uploading
+* ✨ Resize, crop, compress, apply filters
+* 🏷️ Add descriptions, tags, titles
+* 📤 One-click social sharing
+* 🔍 Search & filter by tags, name, date
+* 🗂️ Organize with albums/folders
+* 🔗 Copy image URL & download
+* 💳 Razorpay integration for credit purchase
 
 ---
 
@@ -34,7 +28,7 @@ Imagify is a modern full-stack image management web application that allows user
 | Backend       | Node.js, Express.js, Multer, JWT                                                  |
 | Database      | MongoDB + Mongoose                                                                |
 | Image Hosting | Cloudinary                                                                        |
-| Auth          | JWT, Google OAuth2                                                                |
+| Auth          | JWT, Google OAuth2, **Firebase (Email, Google & GitHub sign-in)**                 |
 
 ---
 
@@ -48,9 +42,12 @@ imagify/
 │   │   ├── pages/
 │   │   ├── services/
 │   │   ├── stores/
+│   │   ├── auth/         # Firebase auth integration (Email, Google, GitHub)
+│   │   ├── ui/           # UI-specific components
 │   │   └── App.jsx
 │   └── index.html
 ├── server/              # Express backend
+│   ├── config/           # Firebase service key + DB config
 │   ├── controllers/
 │   ├── middleware/
 │   ├── models/
@@ -69,188 +66,168 @@ imagify/
 
 ```env
 PORT=5000
-MONGO_URI=your_mongodb_connection_string
+MONGODB_URL=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
+CLIPDROP_API=your_clipdrop_api_key
+RAZORPAY_KEY_ID=your_razorpay_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_secret
+CURRENCY=INR
+CLOUDINARY_CLOUD_NAME=your_cloudinary_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+
+# Firebase Admin SDK
+# ✅ Option 1: Local dev using file path
+VITE_FIREBASE_ADMIN_KEY_PATH=./config/firebaseServiceKey.json
+
+# 🔐 Option 2: Production environment, paste minified JSON
+FIREBASE_SERVICE_ACCOUNT={...}  
 ```
 
 ### Frontend (`/client/.env`)
 
 ```env
-VITE_BACKEND_URL=http://localhost:5000/api
-VITE_GOOGLE_CLIENT_ID=your_google_client_id
+VITE_BACKEND_URL=http://localhost:5000
+VITE_FIREBASE_API_KEY=your_firebase_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+VITE_RAZORPAY_KEY_ID=your_razorpay_key_id
+VITE_API_KEY=your_custom_api_key
+```
+
+---
+
+## 🌐 API Endpoints
+
+### 🔐 Auth & User (`/user`)
+
+```js
+POST   /register          → registerUser
+POST   /login             → loginUser
+POST   /forget-password   → forgetPassword
+POST   /social-login      → social login via Firebase (Google/GitHub)
+POST   /update-user       → updateUser
+GET    /credits           → userCredits (protected)
+POST   /pay-razor         → paymentRazorPay (protected)
+POST   /verify-razor      → verifyRazorPay (protected)
+GET    /saved-images      → getSavedImages (protected)
+POST   /save-image        → saveImage (protected)
+GET    /all-users         → getAllUsers (protected/admin)
+GET    /all-transactions  → getAllTransaction (protected/admin)
+```
+
+### 🖼️ Image Processing (`/image`)
+
+```js
+POST   /generate-image        → generateImage (protected)
+POST   /reImagine             → reImagine (protected, multipart)
+POST   /removebackground      → removeBackGround (protected, multipart)
+POST   /productphotography    → productPhotography (protected, multipart)
+POST   /removetext            → removeText (protected, multipart)
+POST   /upscaling             → upscaling (protected, multipart)
+POST   /replace-background    → replaceBackground (protected, multipart)
+POST   /cleanup               → cleanup (protected, multipart with mask + image)
 ```
 
 ---
 
 ## ▶️ Running the App Locally
 
-### Start Backend
+### Backend
 
 ```bash
 cd server
+npm install
 npm run dev
 ```
-
-### Start Frontend
-
-```bash
-cd client
-npm run dev
-```
-
-Open in browser: [http://localhost:5173](http://localhost:5173)
-
----
-
-## 🌐 API Endpoints
-
-### 🔐 Auth
-
-| Method | Endpoint         | Description         |
-| ------ | ---------------- | ------------------- |
-| POST   | `/auth/register` | Register new user   |
-| POST   | `/auth/login`    | Login existing user |
-| GET    | `/auth/google`   | Google OAuth login  |
-
-### 🖼️ Images
-
-| Method | Endpoint          | Description        |
-| ------ | ----------------- | ------------------ |
-| POST   | `/image/upload`   | Upload new image   |
-| GET    | `/image/user/:id` | Get user images    |
-| DELETE | `/image/:imageId` | Delete image by ID |
-
-### 🛠️ Admin
-
-| Method | Endpoint                | Description             |
-| ------ | ----------------------- | ----------------------- |
-| GET    | `/admin/users`          | Get all users           |
-| DELETE | `/admin/user/:id`       | Delete user             |
-| DELETE | `/admin/image/:imageId` | Moderate (delete) image |
-
----
-
-## 🧪 Testing
-
-- 🔍 **Postman**: For manual API testing
-- 🧪 **Jest**: Unit & integration testing (backend)
-- 🧼 **React Testing Library**: For UI component testing
-- 🚧 **Coming Soon**: Cypress (E2E tests)
-
----
-
-## 🚀 Deployment
 
 ### Frontend
 
-- Host on **Vercel** or **Netlify**
-
 ```bash
-npm run build
+cd client
+npm install
+npm run dev
 ```
 
-- Deploy the `dist` or `build` folder
-
-### Backend
-
-- Host on **Render**, **Railway**, or **VPS** like DigitalOcean
-- Use Node runtime
-- Set up environment variables on the hosting platform
-
-### Image Hosting
-
-- All images are stored and served via **Cloudinary**
+Visit: [http://localhost:5173](http://localhost:5173)
 
 ---
 
-## 🔒 Security Measures
+## 🐳 Dockerize Imagify
 
-- ✅ JWT-based Authentication
-- ✅ Secure password hashing with bcrypt
-- ✅ CORS properly configured
-- ✅ Rate limiting on auth routes
-- ✅ File validation via Multer (file type & size)
-- ✅ HTTPS enforced on deployment
-- ✅ Environment variables secured
+**1. Backend `Dockerfile`:**
 
----
-
-## 🛠️ Admin Panel Features
-
-<<<<<<< HEAD
-| Feature             | Description                                     |
-| ------------------- | ----------------------------------------------- |
-| 📊 Dashboard        | Overview of users, uploads, storage             |
-| 👥 User Management  | Edit/delete users                               |
-| 🖼️ Image Moderation | Remove or report harmful/inappropriate content  |
-| ⚙️ Settings         | Upload size limits, block users, system toggles |
-=======
-| Feature              | Description                                     |
-| -------------------- | ----------------------------------------------- |
-| 📊 Dashboard         | Overview of users, uploads, storage             |
-| 👥 User Management   | Edit/delete users                               |
-| 🖼️ Image Moderation | Remove or report harmful/inappropriate content  |
-| ⚙️ Settings          | Upload size limits, block users, system toggles |
->>>>>>> 516d41b25b0a15af08a789fa3a13b6aac7efb6bb
-
----
-
-## ✨ Future Roadmap
-
-- 🧠 AI-Based Smart Tagging using ML
-- 📅 Schedule Uploads for Future Posting
-- 🧑‍🤝‍🧑 Collaborative Albums
-- 🎨 Custom Filters and Image Editor
-- 📈 Analytics Dashboard for Views/Shares
-- 🔔 Email/Push Notifications
-- 🧩 Plugin Support (e.g., Watermarking)
-
----
-
-## 🤝 Contributing
-
-We welcome all contributions! Follow these steps:
-
-```bash
-# 1. Fork the repository
-# 2. Create a new branch
-git checkout -b feature/your-feature
-
-# 3. Commit your changes
-git commit -m "Add: Your feature"
-
-# 4. Push to your fork
-git push origin feature/your-feature
-
-# 5. Open a Pull Request
+```dockerfile
+FROM node:18
+WORKDIR /app
+COPY ./server ./
+RUN npm install
+CMD ["npm","run","dev"]
+EXPOSE 5000
 ```
 
-> Please ensure code is well documented and tested.
+**2. Frontend `Dockerfile`:**
+
+```dockerfile
+FROM node:18
+WORKDIR /app
+COPY ./client ./
+RUN npm install && npm run build
+RUN npm install -g serve
+CMD ["serve","-s","dist"]
+EXPOSE 5173
+```
+
+**3. `docker-compose.yml`:**
+
+```yaml
+version: "3.9"
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URL=${MONGODB_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      # include all backend env vars
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+```
+
+**4. Bring it up:**
+
+```bash
+docker-compose up --build
+```
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **MIT License**.\
+This project is licensed under the **MIT License**.
 See the [LICENSE](./LICENSE) file for more details.
 
 ---
 
 ## 🌐 Connect with Me
 
-- 💼 [LinkedIn](https://linkedin.com/in/amanpoddar12)
-- 🐙 [GitHub](https://github.com/amanpoddar-dev12)
-- 🧵 [Twitter](https://twitter.com/amanpoddarr
+* 💼 [LinkedIn](https://linkedin.com/in/amanpoddar12)
+* 🔙 [GitHub](https://github.com/amanpoddar-dev12)
+* 🧵 [Twitter](https://twitter.com/amanpoddarr)
 
 ---
 
-> Built with ❤️ using the MERN Stack, Tailwind CSS, and Cloudinary
-<<<<<<< HEAD
-=======
-
->>>>>>> 516d41b25b0a15af08a789fa3a13b6aac7efb6bb
+> Built with ❤️ using the MERN Stack, Tailwind CSS, Firebase, Cloudinary, and Docker
