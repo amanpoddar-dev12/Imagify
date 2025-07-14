@@ -5,7 +5,7 @@ import Result from "./pages/Result";
 import { Toaster } from "react-hot-toast";
 import Navbar from "./component/Navbar";
 import Footer from "./component/Footer";
-import Login from "./component/Login";
+
 import { useContext } from "react";
 import { AppContext } from "./context/AppContext";
 import Studio from "./pages/Studio";
@@ -21,6 +21,7 @@ import AdminDashBoard from "./pages/AdminDashboard";
 import ImageUpscaling from "./component/Feature/ImageUpscaling";
 import ReplaceBackground from "./component/Feature/ReplaceBackGround";
 import CleanupComponent from "./component/Feature/CleanUp";
+import AuthModal from "./Auth/AuthModal";
 
 export default function App() {
   const { showLogin } = useContext(AppContext);
@@ -28,7 +29,7 @@ export default function App() {
     <div className="px-4 sm:px-10 md:px-14 dark:text-white  lg:px-28 min-h-screen bg-gradient-to-b from-teal-50 to-orange-50 dark:bg-gradient-to-brdark:bg-gradient-to-br dark:from-black dark:via-slate-950 dark:to-black transition-colors duration-300">
       <Toaster />
       <Navbar />
-      {showLogin && <Login />}
+      {showLogin && <AuthModal />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/buycredit" element={<Credit />} />

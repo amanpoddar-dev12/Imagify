@@ -5,6 +5,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 const AppContextProvider = (props) => {
+  const [authMode, setAuthMode] = useState("Login");
   const [user, setUser] = useState(null);
   const [role, setRole] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
@@ -252,6 +253,8 @@ const AppContextProvider = (props) => {
     showLogin,
     role,
     setRole,
+    authMode,
+    setAuthMode,
     setShowLogin,
     backendUrl,
     token,

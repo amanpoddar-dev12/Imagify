@@ -1,7 +1,5 @@
-// import React from "react";
-// import { AppContext } from "../context/AppContext";
 import { FiDownload } from "react-icons/fi";
-// import ShareGroup from "../services/ShareGroup";
+
 const ShareList = ({ images, idx }) => {
   //   const { images, loading, fetchSavedImages } = useContext(AppContext);
   const handleDownload = async (url, name) => {
