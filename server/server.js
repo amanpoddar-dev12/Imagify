@@ -15,7 +15,7 @@ console.log(PORT);
 // Middleware
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://imagify-hngzs0e8k-amanpoddars-projects.vercel.app/",
+  "https://imagify-sandy-theta.vercel.app/",
 ];
 
 app.use(
