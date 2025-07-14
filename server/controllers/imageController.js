@@ -200,3 +200,169 @@ export const removetext = async (req, res) => {
     apiKey: process.env.CLIPDROP_API,
   });
 };
+
+export const upscaling = async (req, res) => {
+  const userId = req.userId;
+  const user = await userModel.findById(userId);
+  console.log(userId);
+  console.log(user);
+  if (user.creditBalance <= 0) {
+    return res.json({
+      success: false,
+      message: "No credit balance",
+      creditBalance: user.creditBalance,
+    });
+  }
+  const { target_width, target_height } = req.body;
+  const imagePath = req.file?.path;
+
+  if (!target_width || !target_height || !imagePath) {
+    return res.status(400).json({ error: "Width, height, and image required" });
+  }
+
+  const form = new FormData();
+  form.append("image_file", fs.createReadStream(imagePath));
+  form.append("target_width", target_width);
+  form.append("target_height", target_height);
+
+  try {
+    const response = await axios.post(
+      "https://clipdrop-api.co/image-upscaling/v1/upscale",
+      form,
+      {
+        headers: {
+          ...form.getHeaders(),
+          "x-api-key": process.env.CLIPDROP_API,
+        },
+        responseType: "arraybuffer", // important
+      }
+    );
+
+    const contentType = response.headers["content-type"];
+    const base64Image = Buffer.from(response.data, "binary").toString("base64");
+    const resultImage = `data:${contentType};base64,${base64Image}`;
+    await userModel.findByIdAndUpdate(user._id, {
+      creditBalance: user.creditBalance - 1,
+    });
+
+    res.json({
+      success: true,
+      message: "Image processed successfully",
+      creditBalance: user.creditBalance - 1,
+      resultImage,
+    });
+  } catch (error) {
+    console.error("ClipDrop API error:", error.response?.data || error.message);
+    res.status(500).json({ error: "Image upscaling failed" });
+  } finally {
+    fs.unlinkSync(imagePath); // remove uploaded file
+  }
+};
+
+export const replaceBackground = async (req, res) => {
+  const { prompt } = req.body;
+  const imagePath = req.file.path;
+  const userId = req.userId;
+  const user = await userModel.findById(userId);
+
+  if (user.creditBalance <= 0) {
+    return res.json({
+      success: false,
+      message: "No credit balance",
+      creditBalance: user.creditBalance,
+    });
+  }
+  if (!prompt) {
+    return res.status(400).json({ error: "Prompt is required" });
+  }
+
+  const form = new FormData();
+  form.append("image_file", fs.createReadStream(imagePath));
+  form.append("prompt", prompt);
+
+  try {
+    const response = await axios.post(
+      "https://clipdrop-api.co/replace-background/v1",
+      form,
+      {
+        headers: {
+          ...form.getHeaders(),
+          "x-api-key": process.env.CLIPDROP_API,
+        },
+        responseType: "arraybuffer",
+      }
+    );
+
+    const base64Image = Buffer.from(response.data).toString("base64");
+    const mimeType = response.headers["content-type"];
+    await userModel.findByIdAndUpdate(user._id, {
+      creditBalance: user.creditBalance - 1,
+    });
+    res.status(200).json({
+      resultImage: `data:${mimeType};base64,${base64Image}`,
+      success: true,
+      message: "Image Generated",
+      creditBalance: user.creditBalance - 1,
+    });
+  } catch (error) {
+    console.error("ClipDrop API Error:", error.response?.data || error.message);
+    res.status(500).json({ error: "Background replacement failed" });
+  } finally {
+    fs.unlinkSync(imagePath); // Cleanup temp file
+  }
+};
+
+export const cleanup = async (req, res) => {
+  const imageFile = req.files["image_file"]?.[0];
+  const maskFile = req.files["mask_file"]?.[0];
+  const mode = req.body.mode || "fast";
+  const userId = req.userId;
+  const user = await userModel.findById(userId);
+  if (user.creditBalance <= 0) {
+    return res.json({
+      success: false,
+      message: "No credit balance",
+      creditBalance: user.creditBalance,
+    });
+  }
+  if (!imageFile || !maskFile) {
+    return res.status(400).json({ error: "Image and mask files are required" });
+  }
+
+  const form = new FormData();
+  form.append("image_file", fs.createReadStream(imageFile.path));
+  form.append("mask_file", fs.createReadStream(maskFile.path));
+  form.append("mode", mode);
+
+  try {
+    const response = await axios.post(
+      "https://clipdrop-api.co/cleanup/v1",
+      form,
+      {
+        headers: {
+          ...form.getHeaders(),
+          "x-api-key": process.env.CLIPDROP_API,
+        },
+        responseType: "arraybuffer",
+      }
+    );
+
+    const base64 = Buffer.from(response.data).toString("base64");
+    const mimeType = response.headers["content-type"];
+    await userModel.findByIdAndUpdate(user._id, {
+      creditBalance: user.creditBalance - 1,
+    });
+    res.status(200).json({
+      resultImage: `data:${mimeType};base64,${base64}`,
+      success: true,
+      message: "Image Generated",
+      creditBalance: user.creditBalance - 1,
+    });
+  } catch (error) {
+    console.error("Cleanup API error:", error.response?.data || error.message);
+    res.status(500).json({ error: "Image cleanup failed" });
+  } finally {
+    fs.unlinkSync(imageFile.path);
+    fs.unlinkSync(maskFile.path);
+  }
+};

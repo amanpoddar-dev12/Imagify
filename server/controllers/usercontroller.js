@@ -8,7 +8,7 @@ import streamifier from "streamifier";
 
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password = "firebase", role = "user" } = req.body;
+    const { name, email, password = "firebase" } = req.body;
 
     if (!name || !email || !password) {
       return res.json({ success: false, message: "Missing Details" });
@@ -30,14 +30,14 @@ export const registerUser = async (req, res) => {
       email,
       password: hashedPassword,
       isVerified: false,
-      role, // You can update this later if needed
+      role: "user",
     };
 
     const newUser = new userModel(userData);
     const user = await newUser.save();
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    res.json({ success: true, token, user: { name: user.name } });
+    res.json({ success: true, token, user: { name: user.name }, role });
   } catch (error) {
     console.error(error);
     res.json({ success: false, message: error.message });
@@ -56,7 +56,12 @@ export const loginUser = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-      res.json({ success: true, token, user: { name: user.name } });
+      res.json({
+        success: true,
+        token,
+        user: { name: user.name },
+        role: user.role,
+      });
     } else {
       return res.json({ success: false, message: "Invalid credentials" });
     }
@@ -106,10 +111,46 @@ export const userCredits = async (req, res) => {
       success: true,
       credits: user.creditBalance,
       user: { name: user.name },
+      userRole: user.role,
     });
   } catch (error) {
     console.log(error.message);
     res.json({ success: false, message: error.message });
+  }
+};
+import User from "../models/userModel.js"; // adjust path if different
+
+export const updateUser = async (req, res) => {
+  try {
+    const { email, role } = req.body;
+
+    // Validate input
+    if (!email || !role) {
+      return res.status(400).json({ message: "Email and role are required." });
+    }
+
+    // Find user by email
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    // Update the role
+    user.role = role;
+    await user.save();
+
+    return res.status(200).json({
+      message: `User role updated to ${role}`,
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error("Error updating user role:", error);
+    return res.status(500).json({ message: "Server error." });
   }
 };
 
@@ -271,5 +312,25 @@ export const getSavedImages = async (req, res) => {
     res.json({ success: true, images: user.savedImages });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await userModel.find();
+    res.status(200).json({ success: true, data: users });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+export const getAllTransaction = async (req, res) => {
+  try {
+    const users = await transactionModel.find();
+    res.status(200).json({ success: true, data: users });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ success: false, message: "Server Error" });
   }
 };

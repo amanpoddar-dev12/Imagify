@@ -11,27 +11,27 @@ const SavedImagesList = () => {
     fetchSavedImages();
   }, []);
 
-  const handleDownload = async (url, name) => {
-    try {
-      const response = await fetch(url, { mode: "cors" });
-      if (!response.ok) throw new Error("Network response was not ok");
+  // const handleDownload = async (url, name) => {
+  //   try {
+  //     const response = await fetch(url, { mode: "cors" });
+  //     if (!response.ok) throw new Error("Network response was not ok");
 
-      const blob = await response.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
+  //     const blob = await response.blob();
+  //     const blobUrl = window.URL.createObjectURL(blob);
 
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = name || "image.png";
-      document.body.appendChild(link);
-      link.click();
+  //     const link = document.createElement("a");
+  //     link.href = blobUrl;
+  //     link.download = name || "image.png";
+  //     document.body.appendChild(link);
+  //     link.click();
 
-      link.remove();
-      window.URL.revokeObjectURL(blobUrl);
-    } catch (error) {
-      console.error("Download failed", error);
-      alert("Failed to download image.");
-    }
-  };
+  //     link.remove();
+  //     window.URL.revokeObjectURL(blobUrl);
+  //   } catch (error) {
+  //     console.error("Download failed", error);
+  //     alert("Failed to download image.");
+  //   }
+  // };
 
   if (loading) return <p className="text-center text-gray-500">Loading...</p>;
 

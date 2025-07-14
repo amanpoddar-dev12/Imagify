@@ -2,19 +2,21 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 export const tools = [
-  // {
-  //   title: "Cleanup",
-  //   description:
-  //     "Remove unwanted objects, people, or defects from your images with AI-powered precision.",
-  //   video: "https://static.clipdrop.co/web/apis/cleanup/cleanup-demo.mp4",
-  // },
-  // {
-  //   title: "Image Upscaling",
-  //   description:
-  //     "Enhance the resolution of your images without losing quality.",
-  //   video:
-  //     "https://static.clipdrop.co/web/apis/super-resolution/super-resolution-demo.mp4",
-  // },
+  {
+    title: "Cleanup",
+    description:
+      "Remove unwanted objects, people, or defects from your images with AI-powered precision.",
+    video: "https://static.clipdrop.co/web/apis/cleanup/cleanup-demo.mp4",
+    path: "/cleanup",
+  },
+  {
+    title: "Image Upscaling",
+    description:
+      "Enhance the resolution of your images without losing quality.",
+    video:
+      "https://static.clipdrop.co/web/apis/super-resolution/super-resolution-demo.mp4",
+    path: "/imageupscaling",
+  },
   {
     title: "Product Photography",
     description:
@@ -37,20 +39,21 @@ export const tools = [
     video: "https://static.clipdrop.co/web/homepage/tools/RemoveBG.webm#t=0.1",
     path: "/removebg",
   },
-  // {
-  //   title: "Remove Text",
-  //   description: "Easily erase unwanted text or labels from your images.",
-  //   video:
-  //     "https://static.clipdrop.co/web/apis/remove-text/remove-text-demo.mp4",
-  //   path: "/removetext",
-  // },
-  // {
-  //   title: "Replace Background",
-  //   description:
-  //     "Swap the background of any image with a new one effortlessly.",
-  //   video:
-  //     "https://storage.googleapis.com/clipdrop-static-assets/web/apis/homepage/replace-background.mp4",
-  // },
+  {
+    title: "Remove Text",
+    description: "Easily erase unwanted text or labels from your images.",
+    video:
+      "https://static.clipdrop.co/web/apis/remove-text/remove-text-demo.mp4",
+    path: "/removetext",
+  },
+  {
+    title: "Replace Background",
+    description:
+      "Swap the background of any image with a new one effortlessly.",
+    video:
+      "https://storage.googleapis.com/clipdrop-static-assets/web/apis/homepage/replace-background.mp4",
+    path: "/replace-background",
+  },
   // {
   //   title: "Text Inpainting",
   //   description:

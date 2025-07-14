@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import toast from "react-hot-toast";
 import { AppContext } from "../../context/AppContext";
+import SaveImageButton from "../../services/SaveImages";
 
 function RemoveText() {
   const { removetext } = useContext(AppContext);
@@ -106,7 +107,7 @@ function RemoveText() {
 
         {/* Download Button */}
         {reimaginedImageUrl && (
-          <div className="mt-4 text-center">
+          <div className="mt-4 flex justify-center gap-5 text-center">
             <a
               href={reimaginedImageUrl}
               download="reimagined-image.jpg"
@@ -114,6 +115,7 @@ function RemoveText() {
             >
               Download Image
             </a>
+            <SaveImageButton imageUrl={reimaginedImageUrl} />
           </div>
         )}
       </div>

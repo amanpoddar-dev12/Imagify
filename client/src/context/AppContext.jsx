@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 const AppContextProvider = (props) => {
   const [user, setUser] = useState(null);
+  const [role, setRole] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
   const [showLogin, setShowLogin] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -14,11 +15,17 @@ const AppContextProvider = (props) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  useEffect(() => {
+    const savedProfile = localStorage.getItem("profilePicture");
+    if (savedProfile) setProfilePicture(savedProfile);
+  }, []);
   const loadCreditsData = async () => {
     try {
       const { data } = await axios.get(backendUrl + "/api/user/credits", {
         headers: { token },
       });
+      console.log(data);
+      setRole(data.userRole);
       if (data.success) {
         setCredit(data.credits);
         setUser(data.user);
@@ -101,7 +108,7 @@ const AppContextProvider = (props) => {
   const saveImage = async (imageFile) => {
     try {
       const formData = new FormData();
-      formData.append("image", imageFile); // 👈 'image' must match Multer field name
+      formData.append("image", imageFile);
 
       const res = await fetch(`${backendUrl}/api/user/save-image`, {
         method: "POST",
@@ -152,10 +159,87 @@ const AppContextProvider = (props) => {
       setLoading(false);
     }
   };
+  const upscaleImage = async (imageFile, width, height) => {
+    console.log(width, height);
+    try {
+      const formData = new FormData();
+      formData.append("image_file", imageFile);
+      formData.append("target_width", width);
+      formData.append("target_height", height);
+
+      const response = await axios.post(
+        `${backendUrl}/api/image/upscaling`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            token,
+          },
+        }
+      );
+
+      const imageURL = response.data.resultImage;
+      console.log(imageURL);
+      loadCreditsData?.();
+      return imageURL;
+    } catch (error) {
+      console.error("Upscale error:", error.response?.data || error.message);
+      toast.error("Image upscaling failed");
+    }
+  };
+  const replaceBackground = async (imageFile, prompt) => {
+    try {
+      const formData = new FormData();
+      formData.append("image_file", imageFile);
+      formData.append("prompt", prompt);
+
+      const response = await axios.post(
+        `${backendUrl}/api/image/replace-background`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            token,
+          },
+        }
+      );
+
+      const imageURL = response.data.resultImage;
+      loadCreditsData(); // optional credit update
+      return imageURL;
+    } catch (error) {
+      console.error("Replace BG Error:", error.response?.data || error.message);
+      toast.error(
+        error?.response?.data?.error ||
+          "Something went wrong during replacement"
+      );
+    }
+  };
+  const cleanupImage = async (imageFile, maskFile, mode = "fast") => {
+    const formData = new FormData();
+    formData.append("image_file", imageFile);
+    formData.append("mask_file", maskFile);
+    formData.append("mode", mode);
+
+    const response = await axios.post(
+      `${backendUrl}/api/image/cleanup`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          token,
+        },
+      }
+    );
+    loadCreditsData();
+    return response.data.resultImage;
+  };
+
   const logout = () => {
     localStorage.removeItem("token");
     setToken("");
     setUser(null);
+    navigate("/");
   };
   useEffect(() => {
     if (token) {
@@ -166,6 +250,8 @@ const AppContextProvider = (props) => {
     user,
     setUser,
     showLogin,
+    role,
+    setRole,
     setShowLogin,
     backendUrl,
     token,
@@ -182,6 +268,9 @@ const AppContextProvider = (props) => {
     reMoveBackGround,
     productPhotoGraphy,
     removetext,
+    upscaleImage,
+    replaceBackground,
+    cleanupImage,
     images,
     loading,
     fetchSavedImages,

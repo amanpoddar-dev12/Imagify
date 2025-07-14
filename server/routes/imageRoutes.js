@@ -1,11 +1,14 @@
 import express from "express";
 import multer from "multer";
 import {
+  cleanup,
   generateImage,
   productphotography,
   reImagine,
   removeBackGround,
   removetext,
+  replaceBackground,
+  upscaling,
 } from "../controllers/imageController.js";
 import userAuth from "../middlewares/auth.js";
 import cors from "cors";
@@ -53,5 +56,25 @@ imageRouter.post(
   upload.single("image_file"),
   removetext
 );
-
+imageRouter.post(
+  "/upscaling",
+  userAuth,
+  upload.single("image_file"),
+  upscaling
+);
+imageRouter.post(
+  "/replace-background",
+  userAuth,
+  upload.single("image_file"),
+  replaceBackground
+);
+imageRouter.post(
+  "/cleanup",
+  userAuth,
+  upload.fields([
+    { name: "image_file", maxCount: 1 },
+    { name: "mask_file", maxCount: 1 },
+  ]),
+  cleanup
+);
 export default imageRouter;

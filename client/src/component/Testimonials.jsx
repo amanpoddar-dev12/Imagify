@@ -1,7 +1,29 @@
 import React from "react";
-import { assets, testimonialsData } from "../assets/assets";
+
+import { AnimatedTestimonials } from "./ui/AnimatedTestimonials";
 
 const Testimonials = () => {
+  const testimonials = [
+    {
+      quote:
+        "This app changed our workflow completely. The results are amazing.",
+      name: "Sarah Chen",
+      designation: "Product Manager at TechFlow",
+      src: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=3560",
+    },
+    {
+      quote: "Seamless integration and powerful performance. Just wow!",
+      name: "Michael Rodriguez",
+      designation: "CTO at InnovateSphere",
+      src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=3540",
+    },
+    {
+      quote: "It made our workflow 10x faster. Totally worth it.",
+      name: "Emily Watson",
+      designation: "Operations Director at CloudScale",
+      src: "https://images.unsplash.com/photo-1623582854588-d60de57fa33f?q=80&w=3540",
+    },
+  ];
   return (
     <div className="flex flex-col items-center justify-center my-20 py-12 dark:text-white">
       <h1 className="text-3xl sm:text-4xl font-semibold">
@@ -9,28 +31,7 @@ const Testimonials = () => {
       </h1>
       <p className="text-gray-500  mb-12">What Our Users Are Saying</p>
       <div className="flex flex-wrap gap-6">
-        {testimonialsData.map((testimonial, index) => (
-          <div
-            key={index}
-            className="dark:bg-white/10 bg-white/20 p-12 rounded-lg shadow-md border w-80 m-auto cursor-pointer hover:scale-[1.02] transition-all"
-          >
-            <div>
-              <img src={testimonial.image} className="rounded-full w-14" />
-              <h2 className="text-xl font-semibold mt-3">{testimonial.name}</h2>
-              <p className="text-gray-500 mb-4">{testimonial.role}</p>
-              <div className="flex mb-4">
-                {Array(testimonial.stars)
-                  .fill()
-                  .map((item, index) => (
-                    <img key={index} src={assets.rating_star} />
-                  ))}
-              </div>
-              <p className="text-center text-sm text-gray-600 dark:text-gray-500">
-                {testimonial.text}
-              </p>
-            </div>
-          </div>
-        ))}
+        <AnimatedTestimonials testimonials={testimonials} />
       </div>
     </div>
   );

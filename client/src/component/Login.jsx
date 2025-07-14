@@ -13,19 +13,23 @@ import {
 } from "firebase/auth";
 
 const Login = () => {
-  const [loginAsAdmin, setLoginAsAdmin] = useState(false);
-
   const [state, setState] = useState("Login");
   const [loading, setLoading] = useState(false);
   const [showResendVerification, setShowResendVerification] = useState(false);
 
-  const { setShowLogin, backendUrl, setToken, setUser, setProfilePicture } =
-    useContext(AppContext);
+  const {
+    setShowLogin,
+    backendUrl,
+    setToken,
+    setUser,
+    setProfilePicture,
+    setRole,
+  } = useContext(AppContext);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [createdUser, setCreatedUser] = useState(null); // ✅ Hold user for resend
+  const [createdUser, setCreatedUser] = useState(null);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -36,70 +40,45 @@ const Login = () => {
       setLoading(true);
 
       if (state === "Login") {
-        // 🔐 Admin login flow
-        if (loginAsAdmin) {
-          const { data } = await axios.post(
-            `${backendUrl}/api/user/admin-login`,
-            {
-              email,
-              password,
-            }
-          );
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        if (!userCredential.user.emailVerified) {
+          toast.error("Please verify your email before logging in.", {
+            id: toastId,
+          });
+          setLoading(false);
+          return;
+        }
 
-          if (data?.token && data?.role === "admin") {
-            setToken(data.token);
-            setUser({ name: "Admin" });
-            localStorage.setItem("token", data.token);
-            setShowLogin(false);
-            toast.success("Admin logged in successfully", { id: toastId });
-            window.location.href = "/admin"; // redirect to admin dashboard
-            return;
-          } else {
-            toast.error("Invalid admin credentials", { id: toastId });
-          }
+        const idToken = await userCredential.user.getIdToken();
+        const { data } = await axios.post(
+          backendUrl + "/api/firebase-auth/social-login",
+          { idToken }
+        );
+
+        if (data.success) {
+          setToken(data.token);
+          setUser(data.user);
+          setProfilePicture(data?.user?.profile);
+          localStorage.setItem("profilePicture", data?.user?.profile);
+          localStorage.setItem("token", data.token);
+          setShowLogin(false);
+          toast.success("Logged in successfully", { id: toastId });
         } else {
-          // 🔁 Regular user login
-          const userCredential = await signInWithEmailAndPassword(
-            auth,
-            email,
-            password
-          );
-
-          if (!userCredential.user.emailVerified) {
-            toast.error("Please verify your email before logging in.", {
-              id: toastId,
-            });
-            setLoading(false);
-            return;
-          }
-
-          const idToken = await userCredential.user.getIdToken();
-          const { data } = await axios.post(
-            backendUrl + "/api/firebase-auth/social-login",
-            { idToken }
-          );
-
-          if (data.success) {
-            setToken(data.token);
-            setUser(data.user);
-            localStorage.setItem("token", data.token);
-            setShowLogin(false);
-            toast.success("Logged in successfully", { id: toastId });
-          } else {
-            toast.error(data.message, { id: toastId });
-          }
+          toast.error(data.message, { id: toastId });
         }
       } else {
-        // 🔁 Signup flow (unchanged)
         const userCredential = await createUserWithEmailAndPassword(
           auth,
           email,
           password
         );
-
         await sendEmailVerification(userCredential.user);
+        setCreatedUser(userCredential.user);
         setShowResendVerification(true);
-
         toast.success("Verification email sent!", { id: toastId });
 
         await axios.post(`${backendUrl}/api/user/register`, {
@@ -108,7 +87,6 @@ const Login = () => {
           password: "firebase",
         });
 
-        // setShowLogin(false);
         setState("Login");
       }
 
@@ -132,6 +110,8 @@ const Login = () => {
 
       if (data.success) {
         setProfilePicture(data?.user?.profile);
+        localStorage.setItem("profilePicture", data?.user?.profile);
+
         setToken(data.token);
         setUser(data.user);
         localStorage.setItem("token", data.token);
@@ -207,28 +187,6 @@ const Login = () => {
             />
           </div>
         )}
-        {/* {state === "Login" && (
-          <div className="flex items-center gap-2 mt-2">
-            <input
-              type="checkbox"
-              id="admin-login"
-              checked={loginAsAdmin}
-              onChange={(e) => setLoginAsAdmin(e.target.checked)}
-            />
-            <label htmlFor="admin-login" className="text-sm text-gray-600">
-              Login as Admin
-            </label>
-          </div>
-        )} */}
-
-        {/* {state === "Login" && (
-          <p
-            className="text-sm text-blue-600 my-4 cursor-pointer"
-            onClick={() => setState("Forgot password")}
-          >
-            Forgot Password
-          </p>
-        )} */}
 
         <button
           type="submit"
@@ -244,7 +202,6 @@ const Login = () => {
             : "Reset Password"}
         </button>
 
-        {/* ✅ Resend visible ONLY after Sign Up */}
         {state === "Sign Up" && showResendVerification && (
           <p
             className="text-center text-sm text-blue-600 cursor-pointer mt-3"
