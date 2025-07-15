@@ -37,13 +37,13 @@ Here’s a visual representation of Imagify's high-level architecture:
 
 ### 🖼️ SVG Architecture
 
-<img src="https://jmp.sh/RuKveDFoZjFJsPcdo0Uo" alt="System Design SVG" width="100%"/>
+<img src="https://jumpshare.com/s/MaVO7vCM40Vm8bImj0CL" alt="System Design SVG" width="100%"/>
 
 > *Tip: Zoom in for better clarity.*
 
 ### 📌 UI Preview or Flow Diagram
 
-![Imagify UI or Flow](https://i.ibb.co/bg6Jzskg/system-design.png)
+![Imagify UI or Flow](https://ibb.co/bg6Jzskg)
 
 
 ## 📁 Project Structure
