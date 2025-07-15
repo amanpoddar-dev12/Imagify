@@ -31,11 +31,6 @@ Imagify is a modern full-stack image management web application that allows user
 | Auth          | JWT, Google OAuth2, **Firebase (Email, Google & GitHub sign-in)**                 |
 
 ---
-## 🧬 System Design Overview
-
-Here’s a visual representation of Imagify's high-level architecture:
-
-<img src="https://ibb.co/bg6Jzskg" alt="System Design SVG" width="100%"/>
 
 
 ## 📁 Project Structure
