@@ -36,7 +36,7 @@ Imagify is a modern full-stack image management web application that allows user
 
 Here’s a visual representation of Imagify's high-level architecture:
 
-![Low Level Design](System Design/LLD.png)
+![Low Level Design](System%20Design/LLD.png)
 
 ## 📁 Project Structure
 
