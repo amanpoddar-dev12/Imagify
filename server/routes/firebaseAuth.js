@@ -10,9 +10,7 @@ router.post("/social-login", async (req, res) => {
   const { idToken } = req.body;
   // console.log(idToken);
   try {
-    // 1. Verify token from Firebase
     const decoded = await admin.auth().verifyIdToken(idToken);
-    // const decoded = await admin.auth().verifyIdToken(idToken);
 
     if (!decoded.email_verified) {
       return res
@@ -25,7 +23,6 @@ router.post("/social-login", async (req, res) => {
     // 2. Check if user exists
     let user = await userModel.findOne({ email });
 
-    // 3. If not, create user (no password)
     if (!user) {
       user = await userModel.create({
         name: name || "User",
@@ -36,7 +33,6 @@ router.post("/social-login", async (req, res) => {
       });
     }
 
-    // 4. Create your own JWT
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });

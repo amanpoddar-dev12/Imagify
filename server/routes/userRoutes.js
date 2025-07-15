@@ -13,7 +13,7 @@ import {
 } from "../controllers/usercontroller.js";
 import express from "express";
 import userAuth from "../middlewares/auth.js";
-// import { saveimage } from "../controllers/imageController.js";
+
 import upload from "../middlewares/upload.js";
 const userRouter = express.Router();
 userRouter.post("/register", registerUser);

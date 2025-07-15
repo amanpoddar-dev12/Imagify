@@ -11,7 +11,6 @@ import {
   upscaling,
 } from "../controllers/imageController.js";
 import userAuth from "../middlewares/auth.js";
-import cors from "cors";
 const imageRouter = express.Router();
 
 // Configure multer for in-memory storage
