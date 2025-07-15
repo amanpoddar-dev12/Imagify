@@ -8,15 +8,15 @@ Imagify is a modern full-stack image management web application that allows user
 
 ### 👤 User-Side
 
-* 🔐 Signup/Login with Email, Google, **GitHub OAuth via Firebase**
-* ☁️ Drag-and-drop image uploading
-* ✨ Resize, crop, compress, apply filters
-* 🏷️ Add descriptions, tags, titles
-* 📤 One-click social sharing
-* 🔍 Search & filter by tags, name, date
-* 🗂️ Organize with albums/folders
-* 🔗 Copy image URL & download
-* 💳 Razorpay integration for credit purchase
+- 🔐 Signup/Login with Email, Google, **GitHub OAuth via Firebase**
+- ☁️ Drag-and-drop image uploading
+- ✨ Resize, crop, compress, apply filters
+- 🏷️ Add descriptions, tags, titles
+- 📤 One-click social sharing
+- 🔍 Search & filter by tags, name, date
+- 🗂️ Organize with albums/folders
+- 🔗 Copy image URL & download
+- 💳 Razorpay integration for credit purchase
 
 ---
 
@@ -32,6 +32,11 @@ Imagify is a modern full-stack image management web application that allows user
 
 ---
 
+## 🧬 System Design Overview
+
+Here’s a visual representation of Imagify's high-level architecture:
+
+![Low Level Design](System Design/LLD.png)
 
 ## 📁 Project Structure
 
@@ -82,7 +87,7 @@ CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 VITE_FIREBASE_ADMIN_KEY_PATH=./config/firebaseServiceKey.json
 
 # 🔐 Option 2: Production environment, paste minified JSON
-FIREBASE_SERVICE_ACCOUNT={...}  
+FIREBASE_SERVICE_ACCOUNT={...}
 ```
 
 ### Frontend (`/client/.env`)
@@ -225,9 +230,9 @@ See the [LICENSE](./LICENSE) file for more details.
 
 ## 🌐 Connect with Me
 
-* 💼 [LinkedIn](https://linkedin.com/in/amanpoddar12)
-* 🔙 [GitHub](https://github.com/amanpoddar-dev12)
-* 🧵 [Twitter](https://twitter.com/amanpoddarr)
+- 💼 [LinkedIn](https://linkedin.com/in/amanpoddar12)
+- 🔙 [GitHub](https://github.com/amanpoddar-dev12)
+- 🧵 [Twitter](https://twitter.com/amanpoddarr)
 
 ---
 
