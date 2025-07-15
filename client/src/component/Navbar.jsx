@@ -26,7 +26,7 @@ const Navbar = () => {
             alt="Logo"
             className="transition-colors duration-300"
           />
-          <p className="text-3xl dark:text-white  md:font-semibold lg:font-bold text-black transition-colors duration-300">
+          <p className="hidden sm:block sm:text-3xl dark:text-white md:font-semibold lg:font-bold text-black transition-colors duration-300">
             Imagify
           </p>
         </div>
