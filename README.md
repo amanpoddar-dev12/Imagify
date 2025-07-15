@@ -35,7 +35,7 @@ Imagify is a modern full-stack image management web application that allows user
 
 Here’s a visual representation of Imagify's high-level architecture:
 
-<img src="https://jmp.sh/RuKveDFoZjFJsPcdo0Uo" alt="System Design SVG" width="100%"/>
+<img src="https://ibb.co/bg6Jzskg" alt="System Design SVG" width="100%"/>
 
 
 ## 📁 Project Structure
