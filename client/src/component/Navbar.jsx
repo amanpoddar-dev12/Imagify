@@ -51,11 +51,6 @@ const Navbar = () => {
               onClick={() => navigate("/admindashboard")}
               className="flex items-center gap-1.5 sm:gap-2 border-2  dark:border-none bg-gradient-to-tr dark:from-black-700 dark:to-indigo-700 dark:text-white   px-4 py-1.5 sm:px-5 sm:py-2 rounded-full hover:scale-105 transition-all duration-300 text-black  text-xs sm:text-sm"
             >
-              {/* <img
-                className="w-4 sm:w-5"
-                src={assets.dashboard_icon || assets.credit_star} // replace with your dashboard icon if available
-                alt="dashboard"
-              /> */}
               <MdDashboard />
               <span className="truncate max-w-[100px] sm:max-w-none">
                 Dashboard

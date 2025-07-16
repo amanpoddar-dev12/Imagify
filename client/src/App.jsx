@@ -6,7 +6,7 @@ import { Toaster } from "react-hot-toast";
 import Navbar from "./component/Navbar";
 import Footer from "./component/Footer";
 
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AppContext } from "./context/AppContext";
 import Studio from "./pages/Studio";
 import Reimagine from "./component/Feature/Reimagine";
@@ -23,8 +23,21 @@ import ReplaceBackground from "./component/Feature/ReplaceBackGround";
 import CleanupComponent from "./component/Feature/CleanUp";
 import AuthModal from "./Auth/AuthModal";
 
+// Example usage in Navbar.jsx or directly in App.jsx
+
 export default function App() {
   const { showLogin } = useContext(AppContext);
+  useEffect(() => {
+    const theme = localStorage.getItem("theme");
+    if (
+      theme === "dark" ||
+      (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  });
   return (
     <div className="px-4 sm:px-10 md:px-14 dark:text-white  lg:px-28 min-h-screen bg-gradient-to-b from-teal-50 to-orange-50 dark:bg-gradient-to-brdark:bg-gradient-to-br dark:from-black dark:via-slate-950 dark:to-black transition-colors duration-300">
       <Toaster />
