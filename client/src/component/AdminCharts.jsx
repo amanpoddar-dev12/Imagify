@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import {
   AreaChart,
@@ -15,6 +15,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import { AppContext } from "../context/AppContext";
 
 // 🎨 Chart colors
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7f50", "#00bcd4"];
@@ -43,14 +44,14 @@ const AdminCharts = () => {
   const [selectedUser, setSelectedUser] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const { backendUrl } = useContext(AppContext);
   const isDark = document.documentElement.classList.contains("dark");
   const axisColor = isDark ? "#e5e7eb" : "#374151";
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/user/all-users");
+        const res = await axios.get(`${backendUrl}/api/user/all-users`);
         setUsers(res.data.data || []);
       } catch (err) {
         setError("Failed to fetch data.");

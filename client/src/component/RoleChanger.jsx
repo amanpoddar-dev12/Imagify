@@ -1,24 +1,22 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { AppContext } from "../context/AppContext";
 const UserRoleToggle = ({ email, currentRole }) => {
   const [role, setRole] = useState(currentRole);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
+  const { backendUrl } = useContext(AppContext);
   const handleToggle = async () => {
     const newRole = role === "admin" ? "user" : "admin";
     setLoading(true);
     setMessage("");
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/user/update-user",
-        {
-          email,
-          role: newRole,
-        }
-      );
+      const res = await axios.post(`${backendUrl}/api/user/update-user`, {
+        email,
+        role: newRole,
+      });
 
       setRole(newRole);
       setMessage("Role updated successfully ✅");

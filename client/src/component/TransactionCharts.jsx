@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 import {
@@ -11,8 +11,8 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import { AppContext } from "../context/AppContext";
 
-// ✅ Modern tooltip
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload || payload.length === 0) return null;
 
@@ -37,13 +37,12 @@ const TransactionCharts = () => {
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [range, setRange] = useState({ from: null, to: null });
+  const { backendUrl } = useContext(AppContext);
 
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:5000/api/user/all-transactions"
-        );
+        const res = await axios.get(`${backendUrl}/api/user/all-transactions`);
 
         const rawData = res.data.data;
 

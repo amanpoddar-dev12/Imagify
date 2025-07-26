@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import { Navigate } from "react-router-dom";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 
 const AdminRoute = ({ children }) => {
   const { role, loading } = useContext(AppContext);
@@ -11,7 +11,7 @@ const AdminRoute = ({ children }) => {
   if (role === "admin") {
     return children;
   } else {
-    toast.error("Access denied. Admins only.");
+    // toast.error("Access denied. Admins only.");
     return <Navigate to="/" />;
   }
 };

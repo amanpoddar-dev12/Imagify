@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import RoleChanger from "./RoleChanger";
 import { assets } from "../assets/assets";
+import { AppContext } from "../context/AppContext";
 const UserCharts = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const { backendUrl } = useContext(AppContext);
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5000/api/user/all-users"
-        );
+        const response = await axios.get(`${backendUrl}/api/user/all-users`);
         setUsers(response.data.data);
         console.log(response.data.data);
       } catch (err) {

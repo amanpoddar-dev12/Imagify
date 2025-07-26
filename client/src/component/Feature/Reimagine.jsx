@@ -80,7 +80,7 @@ function Reimagine() {
           <div className="aspect-video mb-2">
             <video
               className="w-full h-full rounded"
-              src="https://storage.googleapis.com/clipdrop-static-assets/web/apis/reimagine/reimagine-720-480.mp4"
+              src="https://static.clipdrop.co/web/homepage/tools/ImageVariation.webm#t=0.1"
               autoPlay
               loop
               muted

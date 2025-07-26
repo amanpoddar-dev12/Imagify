@@ -25,14 +25,14 @@ export const tools = [
       "https://static.clipdrop.co/web/apis/product-photography/demo-hd.mp4",
     path: "/productphotography",
   },
-  // {
-  //   title: "Reimagine",
-  //   description:
-  //     "Generate creative variations of your image based on AI imagination.",
-  //   video:
-  //     "https://static.clipdrop.co/web/homepage/tools/ImageVariation.webm#t=0.1",
-  //   path: "/reimagine",
-  // },
+  {
+    title: "Reimagine",
+    description:
+      "Generate creative variations of your image based on AI imagination.",
+    video:
+      "https://static.clipdrop.co/web/homepage/tools/ImageVariation.webm#t=0.1",
+    path: "/reimagine",
+  },
   {
     title: "Remove Background",
     description: "Automatically remove background from any image in seconds.",
