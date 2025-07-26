@@ -127,7 +127,7 @@ function ImageUpscaling() {
             >
               Download Image
             </a>
-            <SaveImageButton imageUrl={result} />
+            <SaveImageButton imageUrl={resultUrl} />
           </div>
         )}
       </div>
