@@ -22,6 +22,7 @@ import ImageUpscaling from "./component/Feature/ImageUpscaling";
 import ReplaceBackground from "./component/Feature/ReplaceBackGround";
 import CleanupComponent from "./component/Feature/CleanUp";
 import AuthModal from "./Auth/AuthModal";
+import PageNotFound from "./pages/PageNotFound";
 
 // Example usage in Navbar.jsx or directly in App.jsx
 
@@ -57,7 +58,6 @@ export default function App() {
         <Route path="/imageupscaling" element={<ImageUpscaling />} />
         <Route path="/replace-background" element={<ReplaceBackground />} />
         <Route path="/cleanup" element={<CleanupComponent />} />
-
         <Route
           path="/admindashboard"
           element={
@@ -66,6 +66,7 @@ export default function App() {
             </AdminRoute>
           }
         />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
       <Footer />
     </div>
